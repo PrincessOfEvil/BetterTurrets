@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<ThingDef Name="BuildingTurretBase_MiscTurret" Abstract="True" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
+		<category>Building</category>
+		<soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+		<selectable>true</selectable>
+		<drawerType>MapMeshAndRealTime</drawerType>
+		<terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+		<repairEffect>Repair</repairEffect>
+		<leaveResourcesWhenKilled>true</leaveResourcesWhenKilled>
+		<filthLeaving>Filth_RubbleBuilding</filthLeaving>
+		<designationCategory>Security</designationCategory>
+		<building>
+			<wantsHopperAdjacent>true</wantsHopperAdjacent>
+		</building>
+		<statBases>
+			<SellPriceFactor>0.70</SellPriceFactor>
+			<Flammability>1.0</Flammability>
+			<WorkToBuild>3000</WorkToBuild>
+			<MarketValue>350</MarketValue>
+			<Mass>20</Mass>
+			<Beauty>-10</Beauty>
+		</statBases>
+		<tickerType>Normal</tickerType>
+	</ThingDef>
+
+	<ThingDef ParentName="BuildingTurretBase_MiscTurret" Name="BuildingTurretBase_MiscTurretMinifiable" Abstract="True">
+		<description>An automatic turret base that needs a weapon. Explodes if severely damaged.</description>
+		<thingClass>TurretWeaponBase.Building_TurretWeaponBase</thingClass>
+
+		<size>(1,1)</size>
+		<fillPercent>0.4</fillPercent>
+		<castEdgeShadows>true</castEdgeShadows>
+		<altitudeLayer>Building</altitudeLayer>
+
+		<TopMatShortPath>Things/Building/Turret/TurretClamp_Bottom</TopMatShortPath>
+		<TopMatMediumPath>Things/Building/Turret/TurretEmptyWeapon_Top</TopMatMediumPath>
+		<TopMatLongPath>Things/Building/Turret/TurretClamp_Top</TopMatLongPath>
+		<priceShortMax>69</priceShortMax>
+		<priceMediumMax>420</priceMediumMax>
+		<usedTopGraphic>GunMat</usedTopGraphic>
+
+		<statBases>
+			<MaxHitPoints>150</MaxHitPoints>
+			<MarketValue>300</MarketValue>
+		</statBases>
+		<stealable>false</stealable>
+		<rotatable>false</rotatable>
+		<passability>PassThroughOnly</passability>
+		<pathCost>50</pathCost>
+
+		<thingCategories>
+			<li>BuildingsSecurity</li>
+		</thingCategories>
+		<minifiedDef>MinifiedThing</minifiedDef>
+
+		<building>
+			<ai_combatDangerous>true</ai_combatDangerous>
+		</building>
+		<designationHotKey>Misc2</designationHotKey>
+
+		<comps>
+			<li>
+				<compClass>CompQuality</compClass>
+			</li>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>3.4</explosiveRadius>
+				<explosiveDamageType>Bomb</explosiveDamageType>
+				<chanceNeverExplodeFromDamage>0.6</chanceNeverExplodeFromDamage>
+			</li>
+			<li Class="CompProperties_Forbiddable"/>
+			<li Class="CompProperties_Power">
+				<compClass>CompPowerTrader</compClass>
+				<basePowerConsumption>350</basePowerConsumption>
+			</li>
+			<li Class="CompProperties_Flickable"/>
+			<li Class="CompProperties_Breakdownable"/>
+			<li Class="CompProperties_Refuelable">
+				<fuelLabel>Shots until circuit breakdown</fuelLabel>
+				<fuelGizmoLabel>Circuit durability</fuelGizmoLabel>
+				<outOfFuelMessage>Cannot shoot: Needs repair</outOfFuelMessage>
+				<fuelFilter><thingDefs><li>ComponentIndustrial</li></thingDefs></fuelFilter>
+				<fuelCapacity>60</fuelCapacity>
+				<fuelMultiplier>20</fuelMultiplier>
+				<initialFuelPercent>1</initialFuelPercent>
+				<autoRefuelPercent>0.33</autoRefuelPercent>
+				<showFuelGizmo>true</showFuelGizmo>
+				<minimumFueledThreshold>1</minimumFueledThreshold>
+				<factorByDifficulty>true</factorByDifficulty>
+				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+				<fuelIconPath>UI/Overlays/BrokenDown</fuelIconPath>
+			</li>
+		</comps>
+
+		<costList>
+			<Steel>75</Steel>
+			<ComponentIndustrial>3</ComponentIndustrial>
+		</costList>
+		<costStuffCount>75</costStuffCount>
+		<stuffCategories>
+			<li>Metallic</li>
+		</stuffCategories>
+		<terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+
+		<hasTooltip>true</hasTooltip>
+
+		<researchPrerequisites>
+			<li>GunTurrets</li>
+		</researchPrerequisites>
+
+		<cooldownResearchName>ResearchTurretWeaponBaseAlternateCooldown</cooldownResearchName>
+		<disallowSlowingGuns>true</disallowSlowingGuns>
+		<overrideRefuelPerBurst>1</overrideRefuelPerBurst>
+	</ThingDef>
+
+	<ThingDef ParentName="BuildingTurretBase_MiscTurretMinifiable" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
+		<defName>TurretWeaponBaseAutomatic_Buildable</defName>
+		<label>improvised mini-turret</label>
+		<graphicData>
+			<texPath>Things/Building/Turret/TurretBase</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+			<damageData>
+				<rect>(0.2,0.2,0.6,0.6)</rect>
+			</damageData>
+		</graphicData>
+		<uiIconPath>Things/Building/Turret/TurretBase_MenuIcon</uiIconPath>
+		<uiIconScale>0.90</uiIconScale>
+
+		<statBases>
+			<WorkToBuild>3000</WorkToBuild>
+			<ShootingAccuracyTurret>0.995</ShootingAccuracyTurret>
+		</statBases>
+		<comps>
+			<li Class="BetterTurrets.CompProperties_PawnAccuracy">
+				<compClass>BetterTurrets.CompPawnAccuracy</compClass>
+				<accuracy>15</accuracy>
+			</li>
+		</comps>
+
+		<aimTimeMultiplicator>1.25</aimTimeMultiplicator>
+		<aimTimeResearchMultiplicator>1.1</aimTimeResearchMultiplicator>
+		<cooldownMultiplicator>1.25</cooldownMultiplicator>
+		<cooldownResearchMultiplicator>1.1</cooldownResearchMultiplicator>
+	</ThingDef>
+
+
+	<ThingDef ParentName="BuildingTurretBase_MiscTurretMinifiable" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
+		<defName>TurretWeaponBaseAutomaticRapid_Buildable</defName>
+		<label>improvised mini-turret (rapid)</label>
+		<graphicData>
+			<texPath>Things/Building/Turret/TurretBaseMKII</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+			<damageData>
+				<rect>(0.2,0.2,0.6,0.6)</rect>
+			</damageData>
+		</graphicData>
+		<uiIconPath>Things/Building/Turret/TurretBaseMKII_MenuIcon</uiIconPath>
+		<uiIconScale>0.90</uiIconScale>
+
+		<statBases>
+			<WorkToBuild>4500</WorkToBuild>
+			<ShootingAccuracyTurret>0.965</ShootingAccuracyTurret>
+		</statBases>
+		<comps>
+			<li Class="BetterTurrets.CompProperties_PawnAccuracy">
+				<compClass>BetterTurrets.CompPawnAccuracy</compClass>
+				<accuracy>10</accuracy>
+			</li>
+		</comps>
+
+		<researchPrerequisites>
+			<li>ResearchTurretWeaponBaseHighTechTargetAcq</li>
+		</researchPrerequisites>
+
+		<aimTimeMultiplicator>0.75</aimTimeMultiplicator>
+		<aimTimeResearchMultiplicator>0.55</aimTimeResearchMultiplicator>
+		<cooldownMultiplicator>1.25</cooldownMultiplicator>
+		<cooldownResearchMultiplicator>1.1</cooldownResearchMultiplicator>
+	</ThingDef>
+
+	<ThingDef ParentName="BuildingTurretBase_MiscTurretMinifiable" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
+		<defName>TurretWeaponBaseAutomaticTargeting_Buildable</defName>
+		<label>improvised mini-turret (targeting)</label>
+		<graphicData>
+			<texPath>Things/Building/Turret/TurretBaseMKII</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+			<damageData>
+				<rect>(0.2,0.2,0.6,0.6)</rect>
+			</damageData>
+		</graphicData>
+		<uiIconPath>Things/Building/Turret/TurretBaseMKII_MenuIcon</uiIconPath>
+		<uiIconScale>0.90</uiIconScale>
+
+
+		<statBases>
+			<WorkToBuild>4500</WorkToBuild>
+			<ShootingAccuracyTurret>0.989</ShootingAccuracyTurret>
+		</statBases> 
+		<comps>
+			<li Class="BetterTurrets.CompProperties_PawnAccuracy">
+				<compClass>BetterTurrets.CompPawnAccuracy</compClass>
+				<accuracy>20</accuracy>
+			</li>
+		</comps>
+
+		<researchPrerequisites>
+			<li>ResearchTurretWeaponBaseHighTechTargeting</li>
+		</researchPrerequisites>
+
+		<aimTimeMultiplicator>1.875</aimTimeMultiplicator>
+		<aimTimeResearchMultiplicator>1.375</aimTimeResearchMultiplicator>
+		<cooldownMultiplicator>1.25</cooldownMultiplicator>
+		<cooldownResearchMultiplicator>1.1</cooldownResearchMultiplicator>
+	</ThingDef>
+
+
+</Defs>

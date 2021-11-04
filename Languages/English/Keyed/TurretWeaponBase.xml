@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+	<!-- Turret WeaponBase -->
+	<Install>Install</Install>
+	<Uninstall>Uninstall</Uninstall>
+	<FireTime>Cooldown between shots</FireTime>
+	<NoWeaponFoundForTurretBase>No usable weapon available</NoWeaponFoundForTurretBase>
+	
+</LanguageData>

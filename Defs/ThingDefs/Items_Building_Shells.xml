@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<ThingDef Name="ThingSpawnerShellBase" ParentName="MakeableShellBase" Abstract="True">
+    	<statBases>
+	      <MaxHitPoints>60</MaxHitPoints>
+	      <MarketValue>110</MarketValue>
+	      <Mass>1.25</Mass>
+	      <Flammability>1.0</Flammability>
+	      <DeteriorationRate>1.5</DeteriorationRate>
+	    </statBases>
+	    <costList>
+			<Steel>15</Steel>
+			<Chemfuel>5</Chemfuel>
+	    </costList>
+	</ThingDef>
+
+	<ThingDef Name="ThingSpawnerShellBulletBase" ParentName="BaseBullet" Class="WeaponBase.ThingDef_ThingSpawner" Abstract="True">
+		<thingClass>WeaponBase.Projectile_ThingSpawner</thingClass>
+		<projectile>
+			<damageDef>Bullet</damageDef>
+			<damageAmountBase>15</damageAmountBase>
+			<speed>41</speed>
+			<flyOverhead>true</flyOverhead>
+			<soundHitThickRoof>Artillery_HitThickRoof</soundHitThickRoof>
+			<soundExplode>MortarBomb_Explode</soundExplode>
+			<soundImpactAnticipate>MortarRound_PreImpact</soundImpactAnticipate>
+			<soundAmbient>MortarRound_Ambient</soundAmbient>
+		</projectile>
+	</ThingDef>
+
+
+	<ThingDef ParentName="ThingSpawnerShellBase">
+    	<defName>Shell_MicroTurret_Spawner</defName>
+	    <label>turret trap shell</label>
+	    <description>A shell designed to turn into a microturret. Can be fired from mortars. Explodes when damaged.</description>
+	    <graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_HighExplosive</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+	    </graphicData>
+	    <researchPrerequisites>
+		  <li>Mortars</li>
+	      <li>GunTurrets</li>
+	    </researchPrerequisites>
+	    <comps>
+			<li Class="CompProperties_Explosive">
+	        	<explosiveRadius>2.9</explosiveRadius>
+	        	<explosiveDamageType>Bomb</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.4</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.7</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+	    </comps>
+		<projectileWhenLoaded>Bullet_Shell_MicroTurret_Spawner</projectileWhenLoaded>
+	    <costList>
+			<Steel>60</Steel>
+			<Chemfuel>5</Chemfuel>
+		    <ComponentIndustrial>2</ComponentIndustrial>
+	    </costList>
+	</ThingDef>
+	<ThingDef ParentName="ThingSpawnerShellBulletBase" Class="WeaponBase.ThingDef_ThingSpawner">
+		<defName>Bullet_Shell_MicroTurret_Spawner</defName>
+		<label>turret trap shell</label>
+		<graphicData>
+			<texPath>Things/Projectile/ShellHighExplosive</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<shaderType>TransparentPostLight</shaderType>
+		</graphicData>
+
+		<spawnDef>Turret_MicroTurret_Shell</spawnDef>
+	</ThingDef>
+	
+  <ThingDef ParentName="BuildingBase">
+    <defName>Turret_MicroTurret_Shell</defName>
+    <label>micro-turret</label>
+    <description>A shell-deployable automatic turret. Rigged to detonate when destroyed. Its dumb AI brain can't be directly controlled, so beware of friendly fire.</description>
+    <thingClass>Building_TurretGun</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Security/TurretMini_Base</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1.5,1.5)</drawSize>
+      <damageData>
+        <rect>(0.3,0.3,0.5,0.5)</rect>
+      </damageData>
+      <shadowData>
+        <volume>(0.18,0.16,0.18)</volume>
+        <offset>(0,0,0)</offset>
+      </shadowData>
+    </graphicData>
+    <uiIconPath>Things/Building/Security/TurretMini_MenuIcon</uiIconPath>
+    <uiIconScale>0.90</uiIconScale>
+    <altitudeLayer>Building</altitudeLayer>
+    <stealable>false</stealable>
+    <rotatable>false</rotatable>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <Flammability>0.7</Flammability>
+      <Mass>4</Mass>
+      <Beauty>-20</Beauty>
+      <ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+    </statBases>
+    <tickerType>Normal</tickerType>
+    <comps>
+      <li Class="CompProperties_Explosive">
+        <wickTicks>100</wickTicks>
+      	<explosiveRadius>1.9</explosiveRadius>
+        <explosiveDamageType>Bomb</explosiveDamageType>
+      </li>
+      <li Class="CompProperties_Refuelable">
+        <fuelLabel>Shots until selfdestruct</fuelLabel>
+        <fuelGizmoLabel>Barrel durability</fuelGizmoLabel>
+        <destroyOnNoFuel>true</destroyOnNoFuel>
+        <fuelCapacity>30</fuelCapacity>       <!-- 15 bursts -->
+        <initialFuelPercent>1</initialFuelPercent>
+		<fuelMultiplier>30</fuelMultiplier>
+        <minimumFueledThreshold>0</minimumFueledThreshold>
+        <fuelFilter>
+          <thingDefs>
+            <li>Shell_MicroTurret_Spawner</li>
+          </thingDefs>
+        </fuelFilter>
+        <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+        <fuelIconPath>UI/Overlays/Barrel</fuelIconPath>
+      </li>
+    </comps>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <fillPercent>0.2</fillPercent>
+    <hasTooltip>true</hasTooltip>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <building>
+      <combatPower>25</combatPower>   <!-- same as half a scavenger -->
+      <ai_combatDangerous>true</ai_combatDangerous>
+      <turretGunDef>Gun_MiniTurret</turretGunDef>
+      <turretTopDrawSize>1</turretTopDrawSize>
+      <turretBurstCooldownTime>4.8</turretBurstCooldownTime>
+    </building>
+    <placeWorkers>
+      <li>PlaceWorker_TurretTop</li>
+      <li>PlaceWorker_ShowTurretRadius</li>
+    </placeWorkers>
+  </ThingDef>
+
+
+	<ThingDef Name="ThingSpawnerTrapShellBase" ParentName="ThingSpawnerShellBase" Abstract="True">
+	    <recipeMaker>
+			<researchPrerequisites>
+				<li>Mortars</li>
+				<li>IEDs</li>
+			</researchPrerequisites>
+	    </recipeMaker>
+	</ThingDef>
+	
+	<ThingDef ParentName="ThingSpawnerTrapShellBase">
+    	<defName>Shell_HighExplosive_IED_Spawner</defName>
+	    <label>high-explosive trap shell</label>
+	    <description>A shell designed to dig into the ground and turn into a trap. Can be fired from mortars. Explodes when damaged.</description>
+	    <graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_HighExplosive</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+	    </graphicData>
+	    <comps>
+			<li Class="CompProperties_Explosive">
+	        	<explosiveRadius>2.9</explosiveRadius>
+	        	<explosiveDamageType>Bomb</explosiveDamageType>
+				<explosiveExpandPerStackcount>0.4</explosiveExpandPerStackcount>
+				<startWickHitPointsPercent>0.7</startWickHitPointsPercent>
+				<wickTicks>30~60</wickTicks>
+			</li>
+	    </comps>
+		<projectileWhenLoaded>Bullet_Shell_HighExplosive_IED_Spawner</projectileWhenLoaded>
+	    <costList>
+			<Steel>15</Steel>
+			<Chemfuel>5</Chemfuel>
+			<Shell_HighExplosive>2</Shell_HighExplosive>
+	    </costList>
+	</ThingDef>
+	<ThingDef ParentName="ThingSpawnerShellBulletBase" Class="WeaponBase.ThingDef_ThingSpawner">
+		<defName>Bullet_Shell_HighExplosive_IED_Spawner</defName>
+		<label>high-explosive trap shell</label>
+		<graphicData>
+			<texPath>Things/Projectile/ShellHighExplosive</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<shaderType>TransparentPostLight</shaderType>
+		</graphicData>
+
+		<spawnDef>TrapIED_HighExplosive</spawnDef>
+	</ThingDef>
+	
+	<ThingDef ParentName="ThingSpawnerTrapShellBase">
+    	<defName>Shell_Incendiary_IED_Spawner</defName>
+	    <label>incendiary trap shell</label>
+	    <description>A shell designed to dig into the ground and turn into a trap. Starts fires when detonated. Can be fired from mortars. Explodes when damaged.</description>
+	    <graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_Incendiary</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+	    </graphicData>
+	    <comps>
+			<li Class="CompProperties_Explosive">
+		        <explosiveRadius>2.9</explosiveRadius>
+		        <explosiveDamageType>Flame</explosiveDamageType>
+		        <explosiveExpandPerStackcount>0.4</explosiveExpandPerStackcount>
+		        <startWickHitPointsPercent>0.7</startWickHitPointsPercent>
+		        <wickTicks>30~60</wickTicks>
+			</li>
+	    </comps>
+		<projectileWhenLoaded>Bullet_Shell_Incendiary_IED_Spawner</projectileWhenLoaded>
+	    <costList>
+			<Steel>15</Steel>
+			<Chemfuel>5</Chemfuel>
+			<Shell_Incendiary>2</Shell_Incendiary>
+	    </costList>
+	</ThingDef>
+	<ThingDef ParentName="ThingSpawnerShellBulletBase" Class="WeaponBase.ThingDef_ThingSpawner">
+		<defName>Bullet_Shell_Incendiary_IED_Spawner</defName>
+		<label>incendiary trap shell</label>
+		<graphicData>
+			<texPath>Things/Projectile/ShellIncendiary</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<shaderType>TransparentPostLight</shaderType>
+		</graphicData>
+
+		<spawnDef>TrapIED_Incendiary</spawnDef>
+	</ThingDef>
+
+	<ThingDef ParentName="ThingSpawnerTrapShellBase">
+    	<defName>Shell_EMP_IED_Spawner</defName>
+	    <label>EMP trap shell</label>
+	    <description>A shell designed to dig into the ground and turn into a trap. Electromagnetic pulses temporarily disable electrical devices and mechanoids. Can be fired from mortars. Explodes when damaged.</description>
+	    <graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_EMP</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+	    </graphicData>
+	    <comps>
+			<li Class="CompProperties_Explosive">
+		        <explosiveRadius>11.9</explosiveRadius>
+		        <explosiveDamageType>EMP</explosiveDamageType>
+		        <explosiveExpandPerStackcount>0.4</explosiveExpandPerStackcount>
+		        <startWickHitPointsPercent>0.7</startWickHitPointsPercent>
+		        <wickTicks>30~60</wickTicks>
+			</li>
+	    </comps>
+		<projectileWhenLoaded>Bullet_Shell_EMP_IED_Spawner</projectileWhenLoaded>
+	    <costList>
+			<Steel>15</Steel>
+			<Chemfuel>5</Chemfuel>
+			<Shell_EMP>2</Shell_EMP>
+	    </costList>
+	</ThingDef>
+	<ThingDef ParentName="ThingSpawnerShellBulletBase" Class="WeaponBase.ThingDef_ThingSpawner">
+		<defName>Bullet_Shell_EMP_IED_Spawner</defName>
+		<label>EMP trap shell</label>
+		<graphicData>
+			<texPath>Things/Projectile/ShellEMP</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<shaderType>TransparentPostLight</shaderType>
+		</graphicData>
+
+		<spawnDef>TrapIED_EMP</spawnDef>
+	</ThingDef>
+
+	<ThingDef ParentName="ThingSpawnerTrapShellBase">
+    	<defName>Shell_Smoke_IED_Spawner</defName>
+	    <label>smoke trap shell</label>
+	    <description>A shell designed to dig into the ground and turn into a trap, obscuring incoming shots and preventing turrets from locking on when activated. Can be fired from mortars. Explodes when damaged.</description>
+	    <graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_Smoke</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+	    </graphicData>
+	    <comps>
+			<li Class="CompProperties_Explosive">
+		        <explosiveDamageType>Smoke</explosiveDamageType>
+		        <explosiveRadius>11</explosiveRadius>
+		        <postExplosionSpawnThingDef>Gas_Smoke</postExplosionSpawnThingDef>
+		        <postExplosionSpawnChance>1</postExplosionSpawnChance>
+		        <postExplosionSpawnThingCount>1</postExplosionSpawnThingCount>
+		        <wickTicks>30~60</wickTicks>
+			</li>
+	    </comps>
+		<projectileWhenLoaded>Bullet_Shell_Smoke_IED_Spawner</projectileWhenLoaded>
+	    <costList>
+			<Steel>15</Steel>
+			<Chemfuel>5</Chemfuel>
+			<Shell_Smoke>2</Shell_Smoke>
+	    </costList>
+	</ThingDef>
+	<ThingDef ParentName="ThingSpawnerShellBulletBase" Class="WeaponBase.ThingDef_ThingSpawner">
+		<defName>Bullet_Shell_Smoke_IED_Spawner</defName>
+		<label>smoke trap shell</label>
+		<graphicData>
+			<texPath>Things/Projectile/ShellSmoke</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<shaderType>TransparentPostLight</shaderType>
+		</graphicData>
+
+		<spawnDef>TrapIED_Smoke</spawnDef>
+	</ThingDef>
+
+	<ThingDef ParentName="ThingSpawnerTrapShellBase">
+    	<defName>Shell_Firefoam_IED_Spawner</defName>
+	    <label>firefoam trap shell</label>
+	    <description>A shell designed to dig into the ground and turn into a trap. Can be fired from mortars. Explodes when damaged.</description>
+	    <graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_Firefoam</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+	    </graphicData>
+	    <comps>
+			<li Class="CompProperties_Explosive">
+		        <explosiveRadius>9.9</explosiveRadius>
+		        <explosiveDamageType>Extinguish</explosiveDamageType>
+		        <explosiveExpandPerStackcount>0.4</explosiveExpandPerStackcount>
+		        <startWickHitPointsPercent>0.7</startWickHitPointsPercent>
+		        <postExplosionSpawnThingDef>Filth_FireFoam</postExplosionSpawnThingDef>
+		        <postExplosionSpawnChance>1</postExplosionSpawnChance>
+		        <postExplosionSpawnThingCount>3</postExplosionSpawnThingCount>
+		        <applyDamageToExplosionCellsNeighbors>true</applyDamageToExplosionCellsNeighbors>
+		        <explosionEffect>ExtinguisherExplosion</explosionEffect>
+		        <wickTicks>30~60</wickTicks>
+			</li>
+	    </comps>
+		<projectileWhenLoaded>Bullet_Shell_Firefoam_IED_Spawner</projectileWhenLoaded>
+	    <costList>
+			<Steel>15</Steel>
+			<Chemfuel>5</Chemfuel>
+			<Shell_Firefoam>2</Shell_Firefoam>
+	    </costList>
+	</ThingDef>
+	<ThingDef ParentName="ThingSpawnerShellBulletBase" Class="WeaponBase.ThingDef_ThingSpawner">
+		<defName>Bullet_Shell_Firefoam_IED_Spawner</defName>
+		<label>firefoam trap shell</label>
+		<graphicData>
+			<texPath>Things/Projectile/ShellFirefoam</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<shaderType>TransparentPostLight</shaderType>
+		</graphicData>
+
+		<spawnDef>TrapIED_Firefoam</spawnDef>
+	</ThingDef>
+
+	<ThingDef ParentName="ThingSpawnerTrapShellBase">
+    	<defName>Shell_AntigrainWarhead_IED_Spawner</defName>
+	    <label>antigrain warhead trap shell</label>
+	    <description>A shell designed to dig into the ground and turn into a trap. Usually used by spacecraft or glitterworld war machines, it creates a huge explosion and starts fires around the target. Can be fired from mortars. Explodes when damaged.</description>
+	    <graphicData>
+			<texPath>Things/Item/Resource/Shell/Shell_AntigrainWarhead</texPath>
+			<graphicClass>Graphic_StackCount</graphicClass>
+	    </graphicData>
+	    <statBases>
+	      <MarketValue>2400</MarketValue>
+	    </statBases>
+	    <comps>
+			<li Class="CompProperties_Explosive">
+		        <explosiveRadius>14.9</explosiveRadius>
+		        <explosiveDamageType>BombSuper</explosiveDamageType>
+		        <explosiveExpandPerStackcount>0.4</explosiveExpandPerStackcount>
+		        <startWickHitPointsPercent>0.7</startWickHitPointsPercent>
+		        <chanceToStartFire>0.22</chanceToStartFire>
+		        <damageFalloff>true</damageFalloff>
+		        <explosionEffect>GiantExplosion</explosionEffect>
+		        <explosionSound>Explosion_GiantBomb</explosionSound>
+		        <wickTicks>60~120</wickTicks>
+			</li>
+	    </comps>
+		<projectileWhenLoaded>Bullet_Shell_AntigrainWarhead_IED_Spawner</projectileWhenLoaded>
+	    <costList>
+			<Steel>15</Steel>
+			<Chemfuel>5</Chemfuel>
+			<Shell_AntigrainWarhead>1</Shell_AntigrainWarhead>
+	    </costList>
+	</ThingDef>
+	<ThingDef ParentName="ThingSpawnerShellBulletBase" Class="WeaponBase.ThingDef_ThingSpawner">
+		<defName>Bullet_Shell_AntigrainWarhead_IED_Spawner</defName>
+		<label>antigrain warhead trap shell</label>
+		<graphicData>
+			<texPath>Things/Projectile/ShellAntigrainWarhead</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<shaderType>TransparentPostLight</shaderType>
+		</graphicData>
+
+		<spawnDef>TrapIED_AntigrainWarhead</spawnDef>
+	</ThingDef>
+
+
+</Defs>

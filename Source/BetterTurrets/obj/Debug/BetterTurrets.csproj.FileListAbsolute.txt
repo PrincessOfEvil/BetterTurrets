@@ -1,0 +1,7 @@
+D:\RimWorld\Mods\BetterTurrets\Source\BetterTurrets\obj\Debug\BetterTurrets.csproj.CoreCompileInputs.cache
+D:\RimWorld\Mods\BetterTurrets\Assemblies\BetterTurrets.dll
+D:\RimWorld\Mods\BetterTurrets\Assemblies\BetterTurrets.pdb
+D:\RimWorld\Mods\BetterTurrets\Source\BetterTurrets\obj\Debug\BetterTurrets.dll
+D:\RimWorld\Mods\BetterTurrets\Source\BetterTurrets\obj\Debug\BetterTurrets.pdb
+D:\RimWorld\Mods\BetterTurrets\Source\BetterTurrets\obj\Debug\BetterTurrets.csprojAssemblyReference.cache
+D:\RimWorld\Mods\BetterTurrets\Source\BetterTurrets\obj\Debug\BetterTurrets.csproj.CopyComplete
