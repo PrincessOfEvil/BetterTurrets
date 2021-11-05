@@ -1213,8 +1213,38 @@ namespace TurretWeaponBase
                 yield return instructionsList.Last();
                 }
             }
-        #pragma warning restore IDE0051
-        #endregion
+
+        [HarmonyPatch(typeof(CompReloadable), "ReloadFrom")]
+        static class BetterTurrets_CompReloadable_ReloadFrom_Patch
+            {
+            static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
+                {
+                Label? label;
+                var instructionsList = instructions.ToList();
+                for (var i = 0; i < instructionsList.Count; i++)
+                    {
+                    if (instructionsList[i].opcode == OpCodes.Ldarg_0
+                        &&
+                        instructionsList[i + 1].Calls(AccessTools.Method(typeof(CompReloadable), "get_Props"))
+                        &&
+                        instructionsList[i + 2].LoadsField(AccessTools.DeclaredField(typeof(CompProperties_Reloadable), "soundReload"))
+                        &&
+                        instructionsList[i + 3].Branches(out label))
+
+                        {
+                        yield return new CodeInstruction(OpCodes.Ldarg_0);
+                        yield return new CodeInstruction(OpCodes.Call, typeof(CompReloadable).GetProperty("Wearer").GetGetMethod());
+                        yield return new CodeInstruction(OpCodes.Brfalse_S, label);
+                        }
+
+                    yield return instructionsList[i];
+                    }
+                }
+            }
+
+
+#pragma warning restore IDE0051
+            #endregion
 
         }
     }

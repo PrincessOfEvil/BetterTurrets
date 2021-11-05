@@ -35,7 +35,7 @@
 		<altitudeLayer>Building</altitudeLayer>
 
 		<TopMatShortPath>Things/Building/Turret/TurretClamp_Bottom</TopMatShortPath>
-		<TopMatMediumPath>Things/Building/Turret/TurretEmptyWeapon_Top</TopMatMediumPath>
+		<TopMatMediumPath>Things/Building/Turret/TurretClamp_Bottom</TopMatMediumPath>
 		<TopMatLongPath>Things/Building/Turret/TurretClamp_Top</TopMatLongPath>
 		<priceShortMax>69</priceShortMax>
 		<priceMediumMax>420</priceMediumMax>
