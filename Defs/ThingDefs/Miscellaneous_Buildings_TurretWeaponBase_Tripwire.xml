@@ -2,14 +2,6 @@
 <Defs>
 	<ThingDef ParentName="BuildingTurretBase_MiscTurret" Name="BuildingTurretBase_BuildTripwireTurret_Abstract" Abstract="True" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
 		<thingClass>BetterTurrets.Building_TurretWeaponBaseTripwire</thingClass>
-		<graphicData>
-			<texPath>Things/Building/Turret/TurretBaseTrapWithMaterial</texPath>
-			<graphicClass>Graphic_Single</graphicClass>
-			<drawSize>(3,3)</drawSize>
-			<damageData>
-				<rect>(0.2,0.2,0.6,0.6)</rect>
-			</damageData>
-		</graphicData>
 		<minifiedDef>MinifiedThing</minifiedDef>
 		<thingCategories>
 			<li>BuildingsSecurity</li>
@@ -72,7 +64,7 @@
 
 		<rotateTop>false</rotateTop>
 		<TopMatShortPath>Things/Building/Turret/TurretClamp_Bottom</TopMatShortPath>
-		<TopMatMediumPath>Things/Building/Turret/TurretEmptyWeapon_Top</TopMatMediumPath>
+		<TopMatMediumPath>Things/Building/Turret/TurretClamp_Bottom</TopMatMediumPath>
 		<TopMatLongPath>Things/Building/Turret/TurretClamp_Top</TopMatLongPath>
 		<priceShortMax>400</priceShortMax>
 		<priceMediumMax>750</priceMediumMax>
@@ -88,6 +80,16 @@
 	<ThingDef ParentName="BuildingTurretBase_BuildTripwireTurret_Abstract" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
 		<defName>TurretWeaponBaseTripwire_Buildable</defName>
 		<label>Turret Base Tripwire</label>
+		<graphicData>
+			<texPath>Things/Building/Turret/TurretBaseTrap</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+			<damageData>
+				<rect>(0.2,0.2,0.6,0.6)</rect>
+			</damageData>
+		</graphicData>
+		<uiIconPath>Things/Building/Turret/TurretBaseTrap_MenuIcon</uiIconPath>
+
 		<costList>
 			<Steel>20</Steel>
 		</costList>
@@ -113,6 +115,16 @@
 	<ThingDef ParentName="BuildingTurretBase_BuildTripwireTurret_Abstract" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
 		<defName>TurretWeaponBaseTripwirePowered_Buildable</defName>
 		<label>Turret Base Laser Tripwire</label>
+		<graphicData>
+			<texPath>Things/Building/Turret/TurretBaseTrapMKII</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+			<damageData>
+				<rect>(0.2,0.2,0.6,0.6)</rect>
+			</damageData>
+		</graphicData>
+		<uiIconPath>Things/Building/Turret/TurretBaseTrapMKII_MenuIcon</uiIconPath>
+
 		<costList>
 			<Steel>10</Steel>
 			<ComponentIndustrial>1</ComponentIndustrial>
