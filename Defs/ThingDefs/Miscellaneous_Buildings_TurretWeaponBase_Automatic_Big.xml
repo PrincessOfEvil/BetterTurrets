@@ -116,14 +116,8 @@
 		<uiIconScale>0.90</uiIconScale>
 
 		<statBases>
-			<ShootingAccuracyTurret>0.995</ShootingAccuracyTurret>
+			<BetterTurrets_ShootingAccuracyTurret>25</BetterTurrets_ShootingAccuracyTurret>
 		</statBases>
-		<comps>
-			<li Class="BetterTurrets.CompProperties_PawnAccuracy">
-				<compClass>BetterTurrets.CompPawnAccuracy</compClass>
-				<accuracy>25</accuracy>
-			</li>
-		</comps>
 
 		<aimTimeMultiplicator>1.25</aimTimeMultiplicator>
 		<aimTimeResearchMultiplicator>1</aimTimeResearchMultiplicator>
@@ -142,14 +136,8 @@
 
 		<statBases>
 			<WorkToBuild>16500</WorkToBuild>
-			<ShootingAccuracyTurret>0.965</ShootingAccuracyTurret>
+			<BetterTurrets_ShootingAccuracyTurret>20</BetterTurrets_ShootingAccuracyTurret>
 		</statBases>
-		<comps>
-			<li Class="BetterTurrets.CompProperties_PawnAccuracy">
-				<compClass>BetterTurrets.CompPawnAccuracy</compClass>
-				<accuracy>20</accuracy>
-			</li>
-		</comps>
 
 		<researchPrerequisites>
 			<li>ResearchTurretWeaponBaseHighTechTargetAcq</li>
@@ -172,14 +160,8 @@
 
 		<statBases>
 			<WorkToBuild>16500</WorkToBuild>
-			<ShootingAccuracyTurret>0.989</ShootingAccuracyTurret>
+			<BetterTurrets_ShootingAccuracyTurret>30</BetterTurrets_ShootingAccuracyTurret>
 		</statBases>
-		<comps>
-			<li Class="BetterTurrets.CompProperties_PawnAccuracy">
-				<compClass>BetterTurrets.CompPawnAccuracy</compClass>
-				<accuracy>30</accuracy>
-			</li>
-		</comps>
 
 		<researchPrerequisites>
 			<li>ResearchTurretWeaponBaseHighTechTargeting</li>

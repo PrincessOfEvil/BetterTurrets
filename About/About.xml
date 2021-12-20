@@ -8,7 +8,7 @@
 	</supportedVersions>
 	<packageId>princess.BetterTurrets</packageId>
 	<description>
-    null
+    This mod is a fork of the Misc Turrets mod by HaploX1, with a turret rebalance, different ("""""enhanced""""'') turret graphics, 2x2 turrets, support for external reloads, and a whole lot bugfixes.
 	</description>
 	<modDependencies>
 		<li>

@@ -35,7 +35,7 @@ namespace TurretWeaponBase
 
         protected CompPowerTrader powerComp;
         protected CompMannable mannableComp;
-        protected CompPawnAccuracy accComp;
+        protected CompInternalCombustion intCombComp;
         public bool loaded;
 
         protected LocalTargetInfo currentTargetInt = LocalTargetInfo.Invalid;
@@ -256,7 +256,7 @@ namespace TurretWeaponBase
         {
             powerComp = base.GetComp<CompPowerTrader>();
             mannableComp = base.GetComp<CompMannable>();
-            accComp = base.GetComp<CompPawnAccuracy>();
+            intCombComp = base.GetComp<CompInternalCombustion>();
 
             ReadXmlData();
 
@@ -285,8 +285,6 @@ namespace TurretWeaponBase
                 
                 top = new TurretTop_TurretWeaponBase(this);
             }
-
-            ReceiveCompSignal("AccuracyChanged");
         }
 
         public override void ExposeData()
@@ -392,7 +390,7 @@ namespace TurretWeaponBase
                 if (this.forcedTarget.ThingDestroyed)
                     this.ResetForcedTarget();
 
-                bool flag = (this.powerComp == null || this.powerComp.PowerOn) && (this.mannableComp == null || this.mannableComp.MannedNow);
+                bool flag = (this.powerComp == null || this.powerComp.PowerOn) && (this.intCombComp == null || this.intCombComp.PowerOn) && (this.mannableComp == null || this.mannableComp.MannedNow);
                 if (flag && base.Spawned)
                 {
                     this.GunCompEq.verbTracker.VerbsTick();
@@ -1107,16 +1105,6 @@ namespace TurretWeaponBase
 
             return aimTime + cooldown;
         }
-
-
-        protected override void ReceiveCompSignal(string signal)
-            {
-            base.ReceiveCompSignal(signal);
-            if (signal == "AccuracyChanged" && accComp != null)
-                {
-                StatUtility.SetStatValueInList(ref this.def.statBases, StatDefOf.ShootingAccuracyTurret, accComp.accFloat);
-                }
-            }
 
         public virtual Thing FindAmmoInAnyHopper(ThingDef ammo)
             {

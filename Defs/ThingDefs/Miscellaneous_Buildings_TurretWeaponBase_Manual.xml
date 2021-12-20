@@ -13,7 +13,7 @@
 
 	<ThingDef ParentName="BuildingTurretMBase_MiscTurret" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
 		<defName>TurretWeaponBaseMannable</defName>
-		<label>Turret Base</label>
+		<label>turret base</label>
 		<thingClass>TurretWeaponBase.Building_TurretWeaponBase</thingClass>
 		<graphicData>
 			<texPath>Things/Building/Turret/TurretBaseManualWithMaterial</texPath>

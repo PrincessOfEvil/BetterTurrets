@@ -6,5 +6,7 @@
 	<Uninstall>Uninstall</Uninstall>
 	<FireTime>Cooldown between shots</FireTime>
 	<NoWeaponFoundForTurretBase>No usable weapon available</NoWeaponFoundForTurretBase>
+
+	<BetterTurrets_StatPart_AccuracyShift>\nAccuracy bonus</BetterTurrets_StatPart_AccuracyShift>
 	
 </LanguageData>

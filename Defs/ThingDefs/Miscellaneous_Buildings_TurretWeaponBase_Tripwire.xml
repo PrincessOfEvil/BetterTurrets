@@ -16,9 +16,6 @@
 		</statBases>
 		<tickerType>Normal</tickerType>
 		<comps>
-			<li>
-				<compClass>CompQuality</compClass>
-			</li>
 			<li Class="CompProperties_Explosive">
 				<explosiveRadius>1.6</explosiveRadius>
 				<explosiveDamageType>Bomb</explosiveDamageType>
@@ -79,7 +76,7 @@
 
 	<ThingDef ParentName="BuildingTurretBase_BuildTripwireTurret_Abstract" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
 		<defName>TurretWeaponBaseTripwire_Buildable</defName>
-		<label>Turret Base Tripwire</label>
+		<label>turret base tripwire</label>
 		<graphicData>
 			<texPath>Things/Building/Turret/TurretBaseTrap</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -114,7 +111,7 @@
 	
 	<ThingDef ParentName="BuildingTurretBase_BuildTripwireTurret_Abstract" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
 		<defName>TurretWeaponBaseTripwirePowered_Buildable</defName>
-		<label>Turret Base Laser Tripwire</label>
+		<label>turret base laser tripwire</label>
 		<graphicData>
 			<texPath>Things/Building/Turret/TurretBaseTrapMKII</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
