@@ -17,9 +17,9 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="SmallTurret.svg"
-   inkscape:export-filename="D:\RimWorld\Mods\BetterTurrets\Textures\Things\Building\Turret\TurretClamp_Bottom.png"
-   inkscape:export-xdpi="135"
-   inkscape:export-ydpi="135">
+   inkscape:export-filename="D:\RimWorld\Mods\BetterTurrets\Textures\Things\Building\Turret\TurretBaseFuel_MenuIcon.png"
+   inkscape:export-xdpi="165.60957"
+   inkscape:export-ydpi="165.60957">
   <defs
      id="defs4138">
     <linearGradient
@@ -104,10 +104,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.3414634"
-     inkscape:cx="31.822731"
-     inkscape:cy="92.817714"
+     inkscape:cx="49.378842"
+     inkscape:cy="94.908098"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer6"
      showgrid="true"
      units="px"
      inkscape:snap-object-midpoints="true"
@@ -128,8 +128,8 @@
      inkscape:snap-intersection-paths="true"
      inkscape:snap-smooth-nodes="true"
      inkscape:snap-midpoints="true"
-     inkscape:snap-grids="false"
-     showguides="false">
+     inkscape:snap-grids="true"
+     showguides="true">
     <inkscape:grid
        type="xygrid"
        id="grid4684" />
@@ -142,10 +142,39 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="base bottom"
+     style="display:inline"
+     sodipodi:insensitive="true">
+    <path
+       transform="translate(0,-924.36216)"
+       id="path4785-0-8-7-3-9-8"
+       style="display:inline;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 59.99996,986.36216 -6,-6 -2.00004,1 -2,-2 c -3.9999,-3.99999 1.0001,-9.00006 5.00008,-5 l 1.99996,2 -1,2 6,6 1.00004,-1 2,0 0.99996,1 6,-6 -1,-2 1.99996,-2 c 3.99998,-4.00006 8.99998,1.00001 5.00008,5 l -2,2 -2.00004,-1 -6,6 1.00004,1 0,2 -1.00004,1 6,6 2,-1 2,1.99996 c 4.00006,3.99998 -1.000006,8.99998 -5,5.00008 l -2,-2 1,-2.00004 -6,-6 -0.99996,1 -2,0 -1.00004,-1 -6,6 1,2.00004 -2,2 c -3.999994,3.9999 -9.00006,-1.0001 -5,-5.00008 l 2,-1.99996 2,1 6,-6 -0.99996,-1 0,-2 z"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccssccccccccssccccccccssccccccccsscccccc" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="barrel">
+    <path
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 56,72 16,0 0,-16 -16,0 z"
+       id="path4182"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:1;fill:#643535;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 56,72 16,0 0,-16 -16,0 z"
+       id="path4182-3"
+       inkscape:connector-curvature="0" />
+  </g>
   <g
      inkscape:label="base"
      inkscape:groupmode="layer"
@@ -153,12 +182,6 @@
      transform="translate(0,-924.36216)"
      style="display:inline"
      sodipodi:insensitive="true">
-    <path
-       id="path4785-0-8-7-3-9-8"
-       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 59.99996,986.36216 -6,-6 -2.00004,1 -2,-2 c -3.9999,-3.99999 1.0001,-9.00006 5.00008,-5 l 1.99996,2 -1,2 6,6 1.00004,-1 2,0 0.99996,1 6,-6 -1,-2 1.99996,-2 c 3.99998,-4.00006 8.99998,1.00001 5.00008,5 l -2,2 -2.00004,-1 -6,6 1.00004,1 0,2 -1.00004,1 6,6 2,-1 2,1.99996 c 4.00006,3.99998 -1.000006,8.99998 -5,5.00008 l -2,-2 1,-2.00004 -6,-6 -0.99996,1 -2,0 -1.00004,-1 -6,6 1,2.00004 -2,2 c -3.999994,3.9999 -9.00006,-1.0001 -5,-5.00008 l 2,-1.99996 2,1 6,-6 -0.99996,-1 0,-2 z"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccssccccccccssccccccccssccccccccsscccccc" />
     <path
        id="path4785-0-8-7-3-9"
        style="fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -188,7 +211,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="mk2"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true">
     <path
        id="path4798-1-9"
@@ -219,7 +242,8 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="clamp_top"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <path
        style="fill:#a0a0a0;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 54,69 c 0,4 6,4 6,0 l 0,-10 c 0,-4 -6,-3.982899 -6,0 z"

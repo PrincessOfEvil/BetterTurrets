@@ -13,16 +13,17 @@
 
 	<ThingDef ParentName="BuildingTurretMBase_MiscTurret" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
 		<defName>TurretWeaponBaseMannable</defName>
-		<label>turret base</label>
+		<label>manual turret base</label>
 		<thingClass>TurretWeaponBase.Building_TurretWeaponBase</thingClass>
 		<graphicData>
-			<texPath>Things/Building/Turret/TurretBaseManualWithMaterial</texPath>
+			<texPath>Things/Building/Turret/TurretBaseManual</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 			<drawSize>(3,3)</drawSize>
 			<damageData>
 				<rect>(0.2,0.2,0.6,0.6)</rect>
 			</damageData>
 		</graphicData>
+		<uiIconPath>Things/Building/Turret/TurretBaseManual_MenuIcon</uiIconPath>
 		<!-- <minifiedDef>MinifiedThing</minifiedDef> -->
 		<altitudeLayer>Building</altitudeLayer>
 		<stealable>false</stealable>
@@ -31,7 +32,8 @@
 		<useHitPoints>true</useHitPoints>
 		<statBases>
 			<MaxHitPoints>350</MaxHitPoints>
-			<ShootingAccuracyTurret>0.975</ShootingAccuracyTurret>
+			<ShootingAccuracyTurret>0.89</ShootingAccuracyTurret>
+			<BetterTurrets_ShootingAccuracyTurret>20</BetterTurrets_ShootingAccuracyTurret>
 		</statBases>
 		<tickerType>Normal</tickerType>
 		<comps>
@@ -45,7 +47,7 @@
 		<passability>PassThroughOnly</passability>
 		<pathCost>50</pathCost>
 		<fillPercent>0.75</fillPercent>
-		<castEdgeShadows>true</castEdgeShadows>
+		<castEdgeShadows>false</castEdgeShadows>
 		<stuffCategories>
 			<li>Metallic</li>
 		</stuffCategories>
@@ -64,7 +66,7 @@
 
 
 		<TopMatShortPath>Things/Building/Turret/TurretClamp_Bottom</TopMatShortPath>
-		<TopMatMediumPath>Things/Building/Turret/TurretEmptyWeapon_Top</TopMatMediumPath>
+		<TopMatMediumPath>Things/Building/Turret/TurretClamp_Bottom</TopMatMediumPath>
 		<TopMatLongPath>Things/Building/Turret/TurretClamp_Top</TopMatLongPath>
 		<priceShortMax>69</priceShortMax>
 		<priceMediumMax>420</priceMediumMax>

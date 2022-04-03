@@ -7,10 +7,13 @@
 	<ResearchTurretWeaponBaseA.descriptionDiscovered>Now you can build automatic turrets, which can be equipped with hand weapons. \nNote: Reloading is a even more complicated due to the automatic installation.</ResearchTurretWeaponBaseA.descriptionDiscovered>
 	-->
 	
-	<ResearchTurretWeaponBaseAlternateCooldown.label>Weapon Base Reload</ResearchTurretWeaponBaseAlternateCooldown.label>
+	<ResearchTurretWeaponBaseAlternateCooldown.label>weapon base reload</ResearchTurretWeaponBaseAlternateCooldown.label>
 	<ResearchTurretWeaponBaseAlternateCooldown.description>Research how to decrease the reload time of the turret base.</ResearchTurretWeaponBaseAlternateCooldown.description>
 	
-	<ResearchTurretWeaponBaseHighTechTargeting.label>Weapon Base High-Tech Targeting</ResearchTurretWeaponBaseHighTechTargeting.label>
+	<ResearchTurretWeaponBaseHighTechTargeting.label>weapon base high-tech targeting</ResearchTurretWeaponBaseHighTechTargeting.label>
 	<ResearchTurretWeaponBaseHighTechTargeting.description>Research how to build a turret base with an high-tech targeting system.</ResearchTurretWeaponBaseHighTechTargeting.description>
+
+	<ResearchTurretWeaponBaseHighTechTargetAcq.label>weapon base high-tech target acquiring</ResearchTurretWeaponBaseHighTechTargetAcq.label>
+	<ResearchTurretWeaponBaseHighTechTargetAcq.description>Research how to build a turret base with an high-tech target acquiring system.</ResearchTurretWeaponBaseHighTechTargetAcq.description>
 
 </LanguageData>

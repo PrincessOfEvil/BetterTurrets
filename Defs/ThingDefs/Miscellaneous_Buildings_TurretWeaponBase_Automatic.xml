@@ -21,7 +21,7 @@
 			<MarketValue>350</MarketValue>
 			<Mass>20</Mass>
 			<Beauty>-10</Beauty>
-			<ShootingAccuracyTurret>0.96</ShootingAccuracyTurret>
+			<ShootingAccuracyTurret>0.89</ShootingAccuracyTurret>
 		</statBases>
 		<tickerType>Normal</tickerType>
 	</ThingDef>
@@ -218,14 +218,14 @@
 		<defName>TurretWeaponBaseAutomaticFueled_Buildable</defName>
 		<label>jury-rigged mini-turret</label>
 		<graphicData>
-			<texPath>Things/Building/Turret/TurretBase</texPath>
+			<texPath>Things/Building/Turret/TurretBaseFuel</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 			<drawSize>(3,3)</drawSize>
 			<damageData>
 				<rect>(0.2,0.2,0.6,0.6)</rect>
 			</damageData>
 		</graphicData>
-		<uiIconPath>Things/Building/Turret/TurretBase_MenuIcon</uiIconPath>
+		<uiIconPath>Things/Building/Turret/TurretBaseFuel_MenuIcon</uiIconPath>
 		<uiIconScale>0.90</uiIconScale>
 
 		<statBases>
@@ -257,14 +257,14 @@
 		<defName>TurretWeaponBaseAutomaticFueledRapid_Buildable</defName>
 		<label>jury-rigged mini-turret (rapid)</label>
 		<graphicData>
-			<texPath>Things/Building/Turret/TurretBaseMKII</texPath>
+			<texPath>Things/Building/Turret/TurretBaseFuelMKII</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 			<drawSize>(3,3)</drawSize>
 			<damageData>
 				<rect>(0.2,0.2,0.6,0.6)</rect>
 			</damageData>
 		</graphicData>
-		<uiIconPath>Things/Building/Turret/TurretBaseMKII_MenuIcon</uiIconPath>
+		<uiIconPath>Things/Building/Turret/TurretBaseFuelMKII_MenuIcon</uiIconPath>
 		<uiIconScale>0.90</uiIconScale>
 
 		<statBases>
@@ -300,14 +300,14 @@
 		<defName>TurretWeaponBaseAutomaticFueledTargeting_Buildable</defName>
 		<label>jury-rigged mini-turret (targeting)</label>
 		<graphicData>
-			<texPath>Things/Building/Turret/TurretBaseMKII</texPath>
+			<texPath>Things/Building/Turret/TurretBaseFuelMKII</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 			<drawSize>(3,3)</drawSize>
 			<damageData>
 				<rect>(0.2,0.2,0.6,0.6)</rect>
 			</damageData>
 		</graphicData>
-		<uiIconPath>Things/Building/Turret/TurretBaseMKII_MenuIcon</uiIconPath>
+		<uiIconPath>Things/Building/Turret/TurretBaseFuelMKII_MenuIcon</uiIconPath>
 		<uiIconScale>0.90</uiIconScale>
 
 
