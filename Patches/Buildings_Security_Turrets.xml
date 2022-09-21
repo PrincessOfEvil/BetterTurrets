@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+    <Operation Class="PatchOperationAddModExtension">
+		<xpath>/Defs/ThingDef[defName = "Turret_MiniTurret"]</xpath>
+		<value>
+			<li Class="DimensionalTurrets.DefExtension_Turret_3D">
+			    <graphic>
+					<texPath>Models/MiniTurretFixed</texPath>
+					<graphicClass>DimensionalTurrets.Graphic_3D</graphicClass>
+					<!--<shaderType>EdgeDetect</shaderType>-->
+					<shaderParameters>
+						<li Class="DimensionalTurrets.ShaderParameter_3D">
+							<modelDef>DimensionalTurrets_miniturret</modelDef>
+							<rotation>(0, 180, 45)</rotation>
+						</li>
+					</shaderParameters>
+					<drawSize>(4, 4)</drawSize>
+					<drawOffset>(0, 2, 0)</drawOffset>
+			    </graphic>
+			</li>
+		</value>
+    </Operation>
+</Patch>

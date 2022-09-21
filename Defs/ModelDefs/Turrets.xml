@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<DimensionalTurrets.ObjModelDef>
+    	<defName>DimensionalTurrets_miniturret</defName>
+		<objModelPath>DimensionalTurrets\miniturretfixed.obj</objModelPath>
+	</DimensionalTurrets.ObjModelDef>
+</Defs>

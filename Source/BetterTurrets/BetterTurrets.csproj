@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -74,6 +74,9 @@
     <Compile Include="BetterTurrets\Entry.cs" />
     <Compile Include="BetterTurrets\RefuelIC.cs" />
     <Compile Include="BetterTurrets\StatPart_AccuracyShift.cs" />
+    <Compile Include="DimensionalTurrets\Graphic_3D.cs" />
+    <Compile Include="DimensionalTurrets\Loader.cs" />
+    <Compile Include="DimensionalTurrets\Turret_3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TurretWeaponBase\Building_TurretWeaponBase.cs" />
     <Compile Include="TurretWeaponBase\JobDriver_UninstallTurretWeapon.cs" />
