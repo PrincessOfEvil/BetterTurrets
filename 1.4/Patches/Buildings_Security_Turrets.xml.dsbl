@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Patch><!--
+<Patch>
     <Operation Class="PatchOperationAddModExtension">
 		<xpath>/Defs/ThingDef[defName = "Turret_MiniTurret"]</xpath>
 		<value>
@@ -7,7 +7,7 @@
 			    <graphic>
 					<texPath>Models/MiniTurretFixed</texPath>
 					<graphicClass>DimensionalTurrets.Graphic_3D</graphicClass>
-					<!--<shaderType>EdgeDetect</shaderType>--><!--
+					<!--<shaderType>EdgeDetect</shaderType>-->
 					<shaderParameters>
 						<li Class="DimensionalTurrets.ShaderParameter_3D">
 							<modelDef>DimensionalTurrets_miniturret</modelDef>
@@ -20,5 +20,5 @@
 			    </graphic>
 			</li>
 		</value>
-    </Operation>-->
+    </Operation>
 </Patch>
