@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<ThingDef ParentName="BuildingTurretBase_MiscTurret" Name="BuildingTurretBase_BuildTripwireTurret_Abstract" Abstract="True" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
+		<thingClass>BetterTurrets.Building_TurretWeaponBaseTripwire</thingClass>
+		<minifiedDef>MinifiedThing</minifiedDef>
+		<thingCategories>
+			<li>BuildingsSecurity</li>
+		</thingCategories>
+		<stealable>false</stealable>
+		<rotatable>true</rotatable>
+    	<altitudeLayer>LowPlant</altitudeLayer>
+		<statBases>
+			<MaxHitPoints>200</MaxHitPoints>
+			<MarketValue>200</MarketValue>
+			<ShootingAccuracyTurret>1.0</ShootingAccuracyTurret>
+		</statBases>
+		<tickerType>Normal</tickerType>
+		<comps>
+			<li Class="CompProperties_Explosive">
+				<explosiveRadius>1.6</explosiveRadius>
+				<explosiveDamageType>Bomb</explosiveDamageType>
+				<chanceNeverExplodeFromDamage>0.1</chanceNeverExplodeFromDamage>
+			</li>
+			<li Class="CompProperties_Forbiddable"/>
+			<li Class="CompProperties_Flickable"/>
+		</comps>
+		<description>A tripwire emplacement with fixed weapon. Can explode if severely damaged.</description>
+		<size>(1,1)</size>
+		<passability>PassThroughOnly</passability>
+		<pathCost>50</pathCost>
+		<fillPercent>0.4</fillPercent>
+		<castEdgeShadows>true</castEdgeShadows>
+		<hasTooltip>true</hasTooltip>
+
+		<stuffCategories>
+		      <li>Metallic</li>
+		      <li>Woody</li>
+		      <li>Stony</li>
+		</stuffCategories>
+		<costStuffCount>35</costStuffCount>
+		<terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+
+		<designationCategory>Security</designationCategory>
+    	<clearBuildingArea>false</clearBuildingArea>
+		<building>
+			<expandHomeArea>false</expandHomeArea>
+			<isInert>true</isInert>
+      		<isEdifice>false</isEdifice>
+      		<ai_neverTrashThis>true</ai_neverTrashThis>
+			<ai_combatDangerous>false</ai_combatDangerous>
+			<ai_chillDestination>false</ai_chillDestination>
+			<watchBuildingStandDistanceRange>3~3</watchBuildingStandDistanceRange>
+			<watchBuildingStandRectWidth>3</watchBuildingStandRectWidth>
+		</building>
+		<designationHotKey>Misc2</designationHotKey>
+
+		<placeWorkers>
+			<li>PlaceWorker_WatchArea</li>
+		</placeWorkers>
+		<drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+
+		<rotateTop>false</rotateTop>
+		<TopMatShortPath>Things/Building/Turret/TurretClamp_Bottom</TopMatShortPath>
+		<TopMatMediumPath>Things/Building/Turret/TurretClamp_Bottom</TopMatMediumPath>
+		<TopMatLongPath>Things/Building/Turret/TurretClamp_Top</TopMatLongPath>
+		<priceShortMax>400</priceShortMax>
+		<priceMediumMax>750</priceMediumMax>
+		<usedTopGraphic>GunMat</usedTopGraphic>
+
+		<cooldownResearchName>ResearchTurretWeaponBaseAlternateCooldown</cooldownResearchName>
+		<aimTimeMultiplicator>0.25</aimTimeMultiplicator>
+		<aimTimeResearchMultiplicator>0.0</aimTimeResearchMultiplicator>
+		<cooldownMultiplicator>2</cooldownMultiplicator>
+		<cooldownResearchMultiplicator>1.5</cooldownResearchMultiplicator>
+	</ThingDef>
+
+	<ThingDef ParentName="BuildingTurretBase_BuildTripwireTurret_Abstract" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
+		<defName>TurretWeaponBaseTripwire_Buildable</defName>
+		<label>turret base tripwire</label>
+		<graphicData>
+			<texPath>Things/Building/Turret/TurretBaseTrap</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+			<damageData>
+				<rect>(0.2,0.2,0.6,0.6)</rect>
+			</damageData>
+		</graphicData>
+		<uiIconPath>Things/Building/Turret/TurretBaseTrap_MenuIcon</uiIconPath>
+
+		<costList>
+			<Steel>20</Steel>
+		</costList>
+		<comps>
+		    <li Class="CompProperties_Refuelable">
+				<fuelLabel>Shots until tripwire breakdown</fuelLabel>
+				<fuelGizmoLabel>Tripwire durability</fuelGizmoLabel>
+				<outOfFuelMessage>Cannot shoot: Needs new tripwire</outOfFuelMessage>
+				<fuelFilter><thingDefs><li>Steel</li></thingDefs></fuelFilter>
+				<fuelCapacity>1</fuelCapacity>
+				<fuelMultiplier>0.2</fuelMultiplier>
+				<initialFuelPercent>1</initialFuelPercent>
+				<autoRefuelPercent>0.5</autoRefuelPercent>
+				<showFuelGizmo>true</showFuelGizmo>
+				<minimumFueledThreshold>1</minimumFueledThreshold>
+				<factorByDifficulty>false</factorByDifficulty>
+				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+				<fuelIconPath>UI/Overlays/Barrel</fuelIconPath>
+			</li>
+		</comps>
+	</ThingDef>
+	
+	<ThingDef ParentName="BuildingTurretBase_BuildTripwireTurret_Abstract" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
+		<defName>TurretWeaponBaseTripwirePowered_Buildable</defName>
+		<label>turret base laser tripwire</label>
+		<graphicData>
+			<texPath>Things/Building/Turret/TurretBaseTrapMKII</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+			<damageData>
+				<rect>(0.2,0.2,0.6,0.6)</rect>
+			</damageData>
+		</graphicData>
+		<uiIconPath>Things/Building/Turret/TurretBaseTrapMKII_MenuIcon</uiIconPath>
+
+		<costList>
+			<Steel>10</Steel>
+			<ComponentIndustrial>1</ComponentIndustrial>
+		</costList>
+		
+		<comps>
+			<li Class="BetterTurrets.CompProperties_WatchableControl">
+				<compClass>BetterTurrets.CompWatchableControl</compClass>
+				<maxRange>45</maxRange>
+				<maxWidth>5</maxWidth>
+				<drawPlaceWorkersWhileSelectedAnyway>true</drawPlaceWorkersWhileSelectedAnyway>
+			</li>
+			<li Class="CompProperties_Power">
+				<compClass>CompPowerTrader</compClass>
+				<basePowerConsumption>125</basePowerConsumption>
+			</li>
+			<li Class="CompProperties_Breakdownable"/>
+		</comps>
+
+		<drawPlaceWorkersWhileSelected>false</drawPlaceWorkersWhileSelected>
+		<researchPrerequisites>
+			<li>GunTurrets</li>
+		</researchPrerequisites>
+	</ThingDef>
+</Defs>

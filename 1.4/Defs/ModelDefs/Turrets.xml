@@ -4,5 +4,6 @@
 	<DimensionalTurrets.ObjModelDef>
     	<defName>DimensionalTurrets_miniturret</defName>
 		<objModelPath>DimensionalTurrets\miniturretfixed.obj</objModelPath>
+    	<outline>1.0</outline>
 	</DimensionalTurrets.ObjModelDef>
 </Defs>

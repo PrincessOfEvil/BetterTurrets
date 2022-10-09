@@ -21,13 +21,12 @@ namespace DimensionalTurrets
 
 
         protected static AccessTools.FieldRef<TurretTop, Building_Turret> parentTurret = AccessTools.FieldRefAccess<Building_Turret>(typeof(TurretTop), "parentTurret");
-        private static Dictionary<TurretTop, Graphic> graphics = new();
+        private static Dictionary<TurretTop, Graphic_3D> graphics = new();
         [HarmonyPostfix]
         public static void TurretTop_DrawTurret_postfix(Vector3 recoilDrawOffset, float recoilAngleOffset, TurretTop __instance)
             {
             var parent = parentTurret(__instance);
             Vector3 v = new Vector3(parent.def.building.turretTopOffset.x, 0f, parent.def.building.turretTopOffset.y).RotatedBy(__instance.CurRotation);
-            float turretTopDrawSize = parent.def.building.turretTopDrawSize;
             v = v.RotatedBy(recoilAngleOffset) + recoilDrawOffset;
             v += recoilDrawOffset;
 
@@ -37,18 +36,18 @@ namespace DimensionalTurrets
             var ext = parent.def.GetModExtension<DefExtension_Turret_3D>();
             if (ext != null)
                 {
-                Graphic graphic;
+                Graphic_3D graphic;
                 if (!graphics.TryGetValue(__instance, out graphic))
                     {
-                    graphic = ext.graphic.GraphicColoredFor(parent);
+                    graphic = ext.graphic.GraphicColoredFor(parent) as Graphic_3D;
                     graphics.Add(__instance, graphic);
                     }
-                graphic?.Draw(trans, Rot4.North, parent, rot);
+                graphic?.DrawScaled(trans, Rot4.North, parent, rot, parent.def.building.turretTopDrawSize);
                 }
             else
                 {
-                Matrix4x4 matrix = default(Matrix4x4);
-                matrix.SetTRS(trans, (rot).ToQuat(), new Vector3(turretTopDrawSize, 1f, turretTopDrawSize));
+                Matrix4x4 matrix = default;
+                matrix.SetTRS(trans, (rot).ToQuat(), new Vector3(parent.def.building.turretTopDrawSize, 1f, parent.def.building.turretTopDrawSize));
 
                 Graphics.DrawMesh(MeshPool.plane10, matrix, parent.def.building.turretTopMat, 0);
                 }

@@ -8,6 +8,7 @@ using UnityEngine;
 using HarmonyLib;
 using System.IO;
 using System.Xml;
+using RimWorld;
 
 namespace DimensionalTurrets
     {
@@ -40,17 +41,22 @@ namespace DimensionalTurrets
         public ModelDef mDef;
         public Mesh model;
         public Quaternion rotation;
+        public Quaternion postRotation;
         public float scale = 1f;
+        protected float scaleInt = 1f;
+
+        protected Material outlineMat;
 
         public override void Init(GraphicRequest req)
             {
             base.Init(req);
 
-            model = new Mesh();
-            model.name = "StandardModel";
-
             mDef = (req.shaderParameters[0] as ShaderParameter_3D).modelDef;
             rotation = Quaternion.Euler((req.shaderParameters[0] as ShaderParameter_3D).rotation);
+            postRotation = Quaternion.Euler((req.shaderParameters[0] as ShaderParameter_3D).postRotation);
+
+            model = new Mesh();
+            model.name = "StandardModel";
 
             model.SetVertices(mDef.vertices);
             if (!mDef.uvs.NullOrEmpty()) model.SetUVs(0, mDef.uvs);
@@ -71,6 +77,14 @@ namespace DimensionalTurrets
 
 
             if (mDef.rescale) scale = 1f / model.bounds.size.MaxCoord();
+
+            if (mDef.outline > 1.005f)
+                {
+                outlineMat = SolidColorMaterials.SimpleSolidColorMaterial(Color.clear);
+                outlineMat.shader = ShaderTypeDefOf.EdgeDetect.Shader;
+                outlineMat.SetColor(ShaderPropertyIDs.Color, Color.black);
+                outlineMat.SetColor(ShaderPropertyIDs.ColorTwo, Color.clear);
+                }
 
             // GL.wireframe = true;
             }
@@ -98,28 +112,42 @@ namespace DimensionalTurrets
             base.Print(layer, thing, extraRotation);
             }
 
+        public void DrawScaled(Vector3 loc, Rot4 rot, Thing thing, float extraRotation = 0f, float scal = 1f)
+            {
+            scaleInt = scal;
+            this.Draw(loc, rot, thing, extraRotation);
+            }
+
         protected override void DrawMeshInt(Mesh mesh, Vector3 loc, Quaternion quat, Material mat)
             {
-            if(mDef.outline > 1.005f)
-                Graphics.DrawMesh(mesh, Matrix4x4.TRS(loc + Vector3.down, quat, drawSize.ConvertWithY() * scale * mDef.outline), SolidColorMaterials.SimpleSolidColorMaterial(Color.black), 0);
+            DrawMeshInt(mesh, loc, quat, mat, scale);
+            }
 
-            Graphics.DrawMesh(mesh, Matrix4x4.TRS(loc, quat, drawSize.ConvertWithY() * scale), mat, 0);
+        protected virtual void DrawMeshInt(Mesh mesh, Vector3 loc, Quaternion quat, Material mat, float scal)
+            {
+            if (mDef.outline > 1.005f)
+                Graphics.DrawMesh(mesh, Matrix4x4.TRS(loc + Vector3.down, quat * postRotation, drawSize.ConvertWithY() * scal * scaleInt * mDef.outline), outlineMat, 0);
+
+            Graphics.DrawMesh(mesh, Matrix4x4.TRS(loc, quat * postRotation, drawSize.ConvertWithY() * scal * scaleInt), mat, 0);
+
+
+            scaleInt = 1f;
             }
 
         [HarmonyPatch(typeof(Graphic))]
         public class Patch // : AlwaysPatch
             {
             /*
-            [HarmonyPatch(nameof(Graphic.DrawOffset))]
-            [HarmonyPostfix]
-            public static Vector3 override_DrawOffset(Vector3 ret, Graphic __instance)
-                {
-                if (__instance is Graphic_3D _3D && _3D.mDef.center)
+                [HarmonyPatch(nameof(Graphic.DrawOffset))]
+                [HarmonyPostfix]
+                public static Vector3 override_DrawOffset(Vector3 ret, Graphic __instance)
                     {
-                    ret += _3D.rotation * (-_3D.model.bounds.center * _3D.scale);
+                    if (__instance is Graphic_3D _3D && _3D.mDef.center)
+                        {
+                        ret += _3D.rotation * (-_3D.model.bounds.center * _3D.scale);
+                        }
+                    return ret;
                     }
-                return ret;
-                }
             */
             [HarmonyPatch("QuatFromRot")]
             [HarmonyPostfix]
@@ -140,6 +168,7 @@ namespace DimensionalTurrets
 
         // Scale and offset are within GraphicData.
         public Vector3 rotation;
+        public Vector3 postRotation;
 
 
         //[HarmonyPatch(typeof(ShaderParameter))]
@@ -158,6 +187,7 @@ namespace DimensionalTurrets
                         {
                             _3D.modelDef = DefDatabase<ModelDef>.GetNamed(xmlRoot.ChildNodes.OfType<XmlNode>().First(n => n.Name == "modelDef").InnerText);
                             _3D.rotation = ParseHelper.FromString<Vector3>(xmlRoot.ChildNodes.OfType<XmlNode>().First(n => n.Name == "rotation")?.InnerText ?? "0,0,0");
+                            _3D.postRotation = ParseHelper.FromString<Vector3>(xmlRoot.ChildNodes.OfType<XmlNode>().First(n => n.Name == "postRotation")?.InnerText ?? "0,0,0");
                             });
 
                     return false;
@@ -178,7 +208,7 @@ namespace DimensionalTurrets
 
         public bool rescale = false;
         public bool center = false;
-        public float outline = 1.2f;
+        public float outline = 1.0f;
 
         public override void PostLoad()
             {

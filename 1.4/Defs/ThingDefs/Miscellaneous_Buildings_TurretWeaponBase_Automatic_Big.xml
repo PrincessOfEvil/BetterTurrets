@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<ThingDef ParentName="BuildingTurretBase_MiscTurret" Name="BuildingTurretBase_MiscTurret_Beeg" Abstract="True">
+		<description>An automatic turret base that needs a weapon. Explodes if severely damaged.</description>
+		<thingClass>TurretWeaponBase.Building_TurretWeaponBase</thingClass>
+
+		<graphicData>
+			<texPath>Things/Building/Turret/TurretBaseMedium</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+			<damageData>
+				<rect>(0.2,0.2,0.6,0.6)</rect>
+			</damageData>
+	        <shadowData>
+		        <volume>(1.4,0.35,1.4)</volume>
+		        <offset>(0,0,0)</offset>
+	        </shadowData>
+		</graphicData>
+		<size>(2,2)</size>
+		<fillPercent>0.4</fillPercent>
+		<castEdgeShadows>true</castEdgeShadows>
+		<altitudeLayer>Building</altitudeLayer>
+
+		<usedTopGraphic>RangeBurstMat</usedTopGraphic>
+		<TopMatShortPath>Things/Building/Turret/TurretMediumSmallSniper</TopMatShortPath>
+		<TopMatMediumPath>Things/Building/Turret/TurretMediumSmallRapid</TopMatMediumPath>
+		<TopMatLongPath>Things/Building/Turret/TurretMediumBigSniper</TopMatLongPath>
+		<TopMatExtremePath>Things/Building/Turret/TurretMediumBigRapid</TopMatExtremePath>
+  		<!-- burst minimum for automatic barrels, range cutoff for big barrels -->
+		<priceShortMax>3</priceShortMax>
+		<priceMediumMax>29</priceMediumMax>
+
+		<statBases>
+			<MaxHitPoints>350</MaxHitPoints>
+			<Flammability>1.0</Flammability>
+		    <WorkToBuild>15000</WorkToBuild>
+		    <Mass>100</Mass>
+		    <Beauty>-20</Beauty>
+			<MarketValue>3000</MarketValue>
+		</statBases>
+		<stealable>false</stealable>
+		<rotatable>false</rotatable>
+		<passability>PassThroughOnly</passability>
+		<pathCost>75</pathCost>
+
+		<building>
+			<ai_combatDangerous>true</ai_combatDangerous>
+      		<turretTopDrawSize>2.3</turretTopDrawSize>
+		</building>
+		<designationHotKey>Misc3</designationHotKey>
+
+		<comps>
+			<li>
+				<compClass>CompQuality</compClass>
+			</li>
+			<li Class="CompProperties_Explosive">
+		        <wickTicks>240</wickTicks>
+		        <explosiveRadius>5.9</explosiveRadius>
+		        <explosiveDamageType>Bomb</explosiveDamageType>
+		        <chanceNeverExplodeFromDamage>0.5</chanceNeverExplodeFromDamage>
+			</li>
+			<li Class="CompProperties_Forbiddable"/>
+			<li Class="CompProperties_Power">
+				<compClass>CompPowerTrader</compClass>
+				<basePowerConsumption>350</basePowerConsumption>
+			</li>
+			<li Class="CompProperties_Flickable"/>
+			<li Class="CompProperties_Breakdownable"/>
+		    <li Class="CompProperties_Refuelable">
+				<fuelLabel>Shots until circuit breakdown</fuelLabel>
+				<fuelGizmoLabel>Circuit durability</fuelGizmoLabel>
+				<outOfFuelMessage>Cannot shoot: Needs repair</outOfFuelMessage>
+				<fuelFilter><thingDefs><li>ComponentIndustrial</li></thingDefs></fuelFilter>
+				<fuelCapacity>120</fuelCapacity>
+				<fuelMultiplier>20</fuelMultiplier>
+				<initialFuelPercent>1</initialFuelPercent>
+				<autoRefuelPercent>0.16</autoRefuelPercent>
+				<showFuelGizmo>true</showFuelGizmo>
+				<minimumFueledThreshold>1</minimumFueledThreshold>
+				<factorByDifficulty>true</factorByDifficulty>
+				<consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+				<fuelIconPath>UI/Overlays/BrokenDown</fuelIconPath>
+			</li>
+		</comps>
+
+		<costList>
+	        <Steel>150</Steel>
+	        <Plasteel>40</Plasteel>
+      	    <ComponentIndustrial>6</ComponentIndustrial>
+		</costList>
+		<costStuffCount>200</costStuffCount>
+		<stuffCategories>
+			<li>Metallic</li>
+		    <li>Woody</li>
+		    <li>Stony</li>
+		</stuffCategories>
+    	<constructionSkillPrerequisite>6</constructionSkillPrerequisite>
+		<terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+
+		<hasTooltip>true</hasTooltip>
+
+		<researchPrerequisites>
+        	<li>HeavyTurrets</li>
+		</researchPrerequisites>
+
+		<cooldownResearchName>ResearchTurretWeaponBaseAlternateCooldown</cooldownResearchName>
+		<overrideRefuelPerBurst>1</overrideRefuelPerBurst>
+	</ThingDef>
+
+
+
+	<ThingDef ParentName="BuildingTurretBase_MiscTurret_Beeg" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
+		<defName>TurretWeaponBaseAutomaticBig_Buildable</defName>
+		<label>reinforced improvised turret</label>
+		<uiIconPath>Things/Building/Turret/TurretBaseMedium_MenuIcon</uiIconPath>
+		<uiIconScale>0.90</uiIconScale>
+
+		<statBases>
+			<BetterTurrets_ShootingAccuracyTurret>25</BetterTurrets_ShootingAccuracyTurret>
+		</statBases>
+
+		<aimTimeMultiplicator>1.25</aimTimeMultiplicator>
+		<aimTimeResearchMultiplicator>1</aimTimeResearchMultiplicator>
+		<cooldownMultiplicator>1.15</cooldownMultiplicator>
+		<cooldownResearchMultiplicator>1</cooldownResearchMultiplicator>
+	</ThingDef>
+
+	<ThingDef ParentName="BuildingTurretBase_MiscTurret_Beeg" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
+		<defName>TurretWeaponBaseAutomaticBigRapid_Buildable</defName>
+		<label>reinforced improvised turret (rapid)</label>
+		<graphicData>
+			<texPath>Things/Building/Turret/TurretBaseMediumMKII</texPath>
+		</graphicData>
+		<uiIconPath>Things/Building/Turret/TurretBaseMediumRapid_MenuIcon</uiIconPath>
+		<uiIconScale>0.90</uiIconScale>
+
+		<statBases>
+			<WorkToBuild>16500</WorkToBuild>
+			<BetterTurrets_ShootingAccuracyTurret>20</BetterTurrets_ShootingAccuracyTurret>
+		</statBases>
+
+		<researchPrerequisites>
+			<li>ResearchTurretWeaponBaseHighTechTargetAcq</li>
+		</researchPrerequisites>
+
+		<aimTimeMultiplicator>0.625</aimTimeMultiplicator>
+		<aimTimeResearchMultiplicator>0.5</aimTimeResearchMultiplicator>
+		<cooldownMultiplicator>1.15</cooldownMultiplicator>
+		<cooldownResearchMultiplicator>1</cooldownResearchMultiplicator>
+	</ThingDef>
+
+	<ThingDef ParentName="BuildingTurretBase_MiscTurret_Beeg" Class="TurretWeaponBase.ThingDef_TurretWeaponBase">
+		<defName>TurretWeaponBaseAutomaticBigTargeting_Buildable</defName>
+		<label>reinforced improvised turret (targeting)</label>
+		<graphicData>
+			<texPath>Things/Building/Turret/TurretBaseMediumMKII</texPath>
+		</graphicData>
+		<uiIconPath>Things/Building/Turret/TurretBaseMediumTargeting_MenuIcon</uiIconPath>
+		<uiIconScale>0.90</uiIconScale>
+
+		<statBases>
+			<WorkToBuild>16500</WorkToBuild>
+			<BetterTurrets_ShootingAccuracyTurret>30</BetterTurrets_ShootingAccuracyTurret>
+		</statBases>
+
+		<researchPrerequisites>
+			<li>ResearchTurretWeaponBaseHighTechTargeting</li>
+		</researchPrerequisites>
+
+		<aimTimeMultiplicator>1.5625</aimTimeMultiplicator>
+		<aimTimeResearchMultiplicator>1.25</aimTimeResearchMultiplicator>
+		<cooldownMultiplicator>1.15</cooldownMultiplicator>
+		<cooldownResearchMultiplicator>1</cooldownResearchMultiplicator>
+	</ThingDef>
+</Defs>
