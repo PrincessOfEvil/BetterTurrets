@@ -965,7 +965,7 @@ namespace TurretWeaponBase
                 targetScanFlags |= TargetScanFlags.NeedLOSToAll;
                 targetScanFlags |= TargetScanFlags.LOSBlockableByGas;
             }
-            if (this.AttackVerb.IsIncendiary())
+            if (this.AttackVerb.IsIncendiary_Ranged())
             {
                 targetScanFlags |= TargetScanFlags.NeedNonBurning;
             }
@@ -1023,9 +1023,10 @@ namespace TurretWeaponBase
                 this.ResetCurrentTarget();
                 return;
             }
-            if (this.def.building.turretBurstWarmupTime > 0f)
+            float randomInRange = this.def.building.turretBurstWarmupTime.RandomInRange;
+            if (randomInRange > 0f)
             {
-                this.burstWarmupTicksLeft = this.def.building.turretBurstWarmupTime.SecondsToTicks();
+                this.burstWarmupTicksLeft = randomInRange.SecondsToTicks();
                 return;
             }
             if (canBeginBurstImmediately)
@@ -1071,7 +1072,7 @@ namespace TurretWeaponBase
             //base cooldown
             if (this.def.building.turretBurstCooldownTime >= 0f)
                 {
-                aimTime = this.def.building.turretBurstWarmupTime.SecondsToTicks();
+                aimTime = this.def.building.turretBurstWarmupTime.Average.SecondsToTicks();
                 cooldown = this.def.building.turretBurstCooldownTime.SecondsToTicks();
                 }
             else
