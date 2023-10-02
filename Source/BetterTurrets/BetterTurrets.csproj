@@ -35,6 +35,7 @@
     <Compile Include="BetterTurrets\Building_TurretWeaponBaseTripwire.cs" />
     <Compile Include="BetterTurrets\Comp\CompInternalCombustion.cs" />
     <Compile Include="BetterTurrets\Comp\CompProperties_WatchableControl.cs" />
+    <Compile Include="BetterTurrets\Comp\CompShieldedByWalls.cs" />
     <Compile Include="BetterTurrets\Comp\CompWatchableControl.cs" />
     <Compile Include="BetterTurrets\Entry.cs" />
     <Compile Include="BetterTurrets\RefuelIC.cs" />

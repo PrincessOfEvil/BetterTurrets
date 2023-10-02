@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace DimensionalTurrets
@@ -18,13 +20,15 @@ namespace DimensionalTurrets
             //TODO: re-enable when i split it off
             harmony.Patch(AccessTools.Method(typeof(ShaderParameter), nameof(ShaderParameter.LoadDataFromXmlCustom)), prefix: new HarmonyMethod(typeof(ShaderParameter_3D.Patch), nameof(ShaderParameter_3D.Patch.override_LoadDataFromXmlCustom)));
             
+            
             new MultiClassProcessor(harmony, typeof(AlwaysPatch)).Patch();
             }
         }
+
     public struct MultiClassProcessor
         {
-        Harmony harmony;
-        Type type;
+        private readonly Harmony harmony;
+        private readonly Type type;
         public MultiClassProcessor(Harmony harmony, Type type)
             {
             this.harmony = harmony;

@@ -20,7 +20,7 @@
 		<baseCost>750</baseCost>
 		<techLevel>Industrial</techLevel>
 		<prerequisites>
-			<li>Machining</li>
+			<li>GunTurrets</li>
 		</prerequisites>
 		<tab>Miscellaneous</tab>
 		<researchViewX>1</researchViewX>
@@ -34,7 +34,7 @@
 		<baseCost>2500</baseCost>
 		<techLevel>Industrial</techLevel>
     	<prerequisites>
-    		<li>MultiAnalyzer</li>
+    		<li>GunTurrets</li>
     	</prerequisites>
 		<tab>Miscellaneous</tab>
     	<requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>
@@ -49,7 +49,7 @@
 		<baseCost>2500</baseCost>
 		<techLevel>Industrial</techLevel>
     	<prerequisites>
-    		<li>MultiAnalyzer</li>
+    		<li>GunTurrets</li>
     	</prerequisites>
 		<tab>Miscellaneous</tab>
     	<requiredResearchBuilding>HiTechResearchBench</requiredResearchBuilding>

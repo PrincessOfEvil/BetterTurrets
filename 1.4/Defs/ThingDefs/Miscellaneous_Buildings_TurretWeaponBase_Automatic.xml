@@ -24,6 +24,13 @@
 			<ShootingAccuracyTurret>0.89</ShootingAccuracyTurret>
 		</statBases>
 		<tickerType>Normal</tickerType>
+
+
+		<comps>
+			<li>
+				<compClass>BetterTurrets.CompShieldedByWalls</compClass>
+			</li>
+		</comps>
 	</ThingDef>
 
 	<ThingDef ParentName="BuildingTurretBase_MiscTurret" Name="BuildingTurretBase_MiscTurretMinifiable" Abstract="True">
