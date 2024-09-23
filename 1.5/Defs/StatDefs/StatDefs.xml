@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <StatDef>
+    <defName>BetterTurrets_ShootingAccuracyTurret</defName>
+    <label>shooting accuracy (turrets)</label>
+    <category>BasicsNonPawn</category>
+    <defaultBaseValue>0</defaultBaseValue>
+    <alwaysHide>true</alwaysHide>
+    <parts>
+      <li Class="StatPart_Quality_Offset">
+        <offsetAwful>-2</offsetAwful>
+        <offsetPoor>-1</offsetPoor>
+        <offsetNormal>0</offsetNormal>
+        <offsetGood>1</offsetGood>
+        <offsetExcellent>2</offsetExcellent>
+        <offsetMasterwork>3.5</offsetMasterwork>
+        <offsetLegendary>5</offsetLegendary>
+
+		<thingDefs>
+			<li>TurretWeaponBaseAutomatic_Buildable</li>
+			<li>TurretWeaponBaseAutomaticRapid_Buildable</li>
+			<li>TurretWeaponBaseAutomaticTargeting_Buildable</li>
+
+			<li>TurretWeaponBaseAutomaticFueled_Buildable</li>
+			<li>TurretWeaponBaseAutomaticFueledRapid_Buildable</li>
+			<li>TurretWeaponBaseAutomaticFueledTargeting_Buildable</li>
+
+			<li>TurretWeaponBaseAutomaticBig_Buildable</li>
+			<li>TurretWeaponBaseAutomaticBigRapid_Buildable</li>
+			<li>TurretWeaponBaseAutomaticBigTargeting_Buildable</li>
+		</thingDefs>
+      </li>
+    </parts>
+  </StatDef>
+</Defs>

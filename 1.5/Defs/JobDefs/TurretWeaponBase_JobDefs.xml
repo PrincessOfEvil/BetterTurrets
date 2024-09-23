@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+	<!--========= Install weapon on turret base ============-->
+
+	<JobDef>
+		<defName>InstallWeaponOnTurretBase</defName>
+		<driverClass>TurretWeaponBase.JobDriver_HaulToCellAndDoWork</driverClass>
+		<reportString>Installing TargetA.</reportString>
+	</JobDef>
+
+	<JobDef>
+		<defName>UninstallWeaponFromTurretBase</defName>
+		<driverClass>TurretWeaponBase.JobDriver_UninstallTurretWeapon</driverClass>
+		<reportString>Uninstalling weapon from TargetA.</reportString>
+	</JobDef>
+
+	<!-- Special refueling job for mixed turrets. No atomic version. -->
+	<WorkGiverDef>
+		<defName>TurretWeaponBase_RefuelIC</defName>
+		<label>refuel fuelable buildings</label>
+		<giverClass>BetterTurrets.WorkGiver_RefuelIC</giverClass>
+		<workType>Hauling</workType>
+		<verb>refuel</verb>
+		<gerund>refueling</gerund>
+		<priorityInType>141</priorityInType>
+		<requiredCapacities>
+			<li>Manipulation</li>
+		</requiredCapacities>
+		<prioritizeSustains>true</prioritizeSustains>
+	</WorkGiverDef>
+	<JobDef>
+		<defName>TurretWeaponBase_RefuelIC</defName>
+		<driverClass>BetterTurrets.JobDriver_RefuelIC</driverClass>
+		<reportString>refueling TargetA.</reportString>
+		<suspendable>false</suspendable>
+		<allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+	</JobDef>
+</Defs>

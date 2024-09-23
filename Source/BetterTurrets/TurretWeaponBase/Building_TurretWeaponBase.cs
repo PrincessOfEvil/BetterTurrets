@@ -8,11 +8,11 @@ using Verse;
 using Verse.AI;
 using Verse.Sound;
 using RimWorld;
-using System.Runtime.Remoting.Messaging;
 using HarmonyLib;
 using System.Reflection;
 using System.Reflection.Emit;
 using BetterTurrets;
+
 //using RimWorld.Planet;
 //using RimWorld.SquadAI;
 
@@ -43,17 +43,17 @@ namespace TurretWeaponBase
         protected int burstWarmupTicksLeft;
         protected int burstCooldownTicksLeft;
 
-        private bool collectingGunAllowed = false;
-        private int counterSearchForGun;
-        private const int counterSearchForGunMax = 60;
-        private const int floatMenuMaxEntries = 10;
-        private int floatMenuShowEntries = 0;
+        private       bool collectingGunAllowed;
+        private       int  counterSearchForGun;
+        private const int  counterSearchForGunMax = 60;
+        private const int  floatMenuMaxEntries    = 10;
+        private       int  floatMenuShowEntries;
 
         private bool disallowSlowingGuns;
 
         private int overrideRefuelPerBurst;
 
-        private bool forceCreateGunAndTop = false;
+        private bool forceCreateGunAndTop;
 
         public enum TopMatType
         {
@@ -64,7 +64,7 @@ namespace TurretWeaponBase
             }
         public TopMatType usedTopMatType;
 
-        public string cooldownResearchName = null;
+        public string cooldownResearchName;
 
         public float aimTimeMultiplicator = 1.5f;
         public float aimTimeResearchMultiplicator = 1.1f;
@@ -82,10 +82,10 @@ namespace TurretWeaponBase
         public string TopMatLongWeaponPath;
         public string TopMatExtremeWeaponPath;
 
-        public Material TopMatShortWeapon = null;
-        public Material TopMatMediumWeapon = null;
-        public Material TopMatLongWeapon = null;
-        public Material TopMatExtremeWeapon = null;
+        public Material TopMatShortWeapon;
+        public     Material TopMatMediumWeapon;
+        public Material TopMatLongWeapon;
+        public Material TopMatExtremeWeapon;
 
         private bool holdFire;
 
@@ -95,105 +95,31 @@ namespace TurretWeaponBase
 
         private ThingDef cachedHopperDef;
 
-        private bool MannedByColonist
-        {
-            get
-            {
-                return this.mannableComp != null && this.mannableComp.ManningPawn != null && this.mannableComp.ManningPawn.Faction == Faction.OfPlayer;
-            }
-        }
-        private bool CanToggleHoldFire
-        {
-            get
-            {
-                return base.Faction == Faction.OfPlayer || this.MannedByColonist;
-            }
-        }
+        private bool MannedByColonist => mannableComp is { ManningPawn: not null } && mannableComp.ManningPawn.Faction == Faction.OfPlayer;
 
-        public override Verb AttackVerb
-        {
-            get
-            {
-                if (gun == null)
-                    return null;
+        private bool CanToggleHoldFire => Faction == Faction.OfPlayer || MannedByColonist;
 
-                return this.GunCompEq.verbTracker.PrimaryVerb;
-            }
-        }
+        public override Verb AttackVerb => gun == null ? null : GunCompEq.verbTracker.PrimaryVerb;
 
-        private bool CanSetForcedTarget
-        {
-            get
-            {
-                return (gun != null) && this.MannedByColonist;
-            }
-        }
+        private bool CanSetForcedTarget => (gun != null) && MannedByColonist;
 
-        public override LocalTargetInfo CurrentTarget
-        {
-            get
-            {
-                return currentTargetInt;
-            }
-        }
+        public override LocalTargetInfo CurrentTarget => currentTargetInt;
 
-        protected bool WarmingUp
-        {
-            get
-            {
-                return burstWarmupTicksLeft > 0;
-            }
-        }
+        protected bool WarmingUp => burstWarmupTicksLeft > 0;
 
-        public CompEquippable GunCompEq
-        {
-            get
-            {
-                if (gun == null)
-                    return null;
+        public CompEquippable        GunCompEq  => gun?.TryGetComp<CompEquippable>();
+        public CompApparelReloadable GunCompRel => gun?.TryGetComp<CompApparelReloadable>();
 
-                return gun.TryGetComp<CompEquippable>();
-            }
-            }
-        public CompReloadable GunCompRel
-            {
-            get
-                {
-                if (gun == null)
-                    return null;
+        public List<IntVec3> AdjCellsCardinalInBounds =>
+            cachedAdjCellsCardinal ??= (from c in GenAdj.CellsAdjacentCardinal(this)
+                                        where c.InBounds(Map)
+                                        select c).ToList();
 
-                return gun.TryGetComp<CompReloadable>();
-                }
-            }
+        public ThingDef HopperDef =>
+            cachedHopperDef ??= DefDatabase<ThingDef>.GetNamedSilentFail("BetterTurrets_Hopper");
 
-        public List<IntVec3> AdjCellsCardinalInBounds
-            {
-            get
-                {
-                if (this.cachedAdjCellsCardinal == null)
-                    {
-                    this.cachedAdjCellsCardinal = (from c in GenAdj.CellsAdjacentCardinal(this)
-                                                   where c.InBounds(base.Map)
-                                                   select c).ToList();
-                    }
-                return this.cachedAdjCellsCardinal;
-                }
-            }
-
-        public ThingDef HopperDef
-            {
-            get
-                {
-                if (this.cachedHopperDef == null)
-                    {
-                    this.cachedHopperDef = DefDatabase<ThingDef>.GetNamedSilentFail("BetterTurrets_Hopper");
-                    }
-                return this.cachedHopperDef;
-                }
-            }
-
-        private string txtFloatMenuInstallWeapon = "Install";
-        private string txtFloatMenuUninstallWeapon = "Uninstall";
+        private readonly string txtFloatMenuInstallWeapon   = "Install";
+        private readonly string txtFloatMenuUninstallWeapon = "Uninstall";
 
         #endregion
 
@@ -254,9 +180,9 @@ namespace TurretWeaponBase
         /// </summary>
         private void SpawnSetup_Part2()
         {
-            powerComp = base.GetComp<CompPowerTrader>();
-            mannableComp = base.GetComp<CompMannable>();
-            intCombComp = base.GetComp<CompInternalCombustion>();
+            powerComp = GetComp<CompPowerTrader>();
+            mannableComp = GetComp<CompMannable>();
+            intCombComp = GetComp<CompInternalCombustion>();
 
             ReadXmlData();
 
@@ -272,16 +198,15 @@ namespace TurretWeaponBase
             if (Faction != Faction.OfPlayer)
             {
                 def.building.turretGunDef = ThingDef.Named("Gun_Revolver");
-                this.gun = (Thing)ThingMaker.MakeThing(def.building.turretGunDef, null);
+                gun                       = ThingMaker.MakeThing(def.building.turretGunDef);
 
-                List<Verb> allVerbs = this.GunCompEq.AllVerbs;
+                List<Verb> allVerbs = GunCompEq.AllVerbs;
 
-                for (int i = 0; i < allVerbs.Count; i++)
-                {
-                    Verb item = allVerbs[i];
-                    item.caster = this;
-                    item.castCompleteCallback = new Action(this.BurstComplete);
-                }
+                foreach (Verb item in allVerbs)
+                    {
+                    item.caster               = this;
+                    item.castCompleteCallback = BurstComplete;
+                    }
                 
                 top = new TurretTop_TurretWeaponBase(this);
             }
@@ -292,14 +217,14 @@ namespace TurretWeaponBase
 
             base.ExposeData();
 
-            Scribe_Deep.Look<Thing>(ref gun, "activeGun");
+            Scribe_Deep.Look(ref gun, "activeGun");
 
-            Scribe_Values.Look<bool>(ref collectingGunAllowed, "collectingGunAllowed");
-            Scribe_Values.Look<int>(ref burstCooldownTicksLeft, "burstCooldownTicksLeft", 0, false);
-            Scribe_Values.Look<int>(ref this.burstWarmupTicksLeft, "burstWarmupTicksLeft", 0, false);
-            Scribe_TargetInfo.Look(ref this.currentTargetInt, "currentTarget");
-            Scribe_Values.Look<bool>(ref this.loaded, "loaded", false, false);
-            Scribe_Values.Look<bool>(ref this.holdFire, "holdFire", false, false);
+            Scribe_Values.Look(ref collectingGunAllowed,   "collectingGunAllowed");
+            Scribe_Values.Look(ref burstCooldownTicksLeft, "burstCooldownTicksLeft");
+            Scribe_Values.Look(ref burstWarmupTicksLeft,   "burstWarmupTicksLeft");
+            Scribe_TargetInfo.Look(ref currentTargetInt, "currentTarget");
+            Scribe_Values.Look(ref loaded, "loaded");
+            Scribe_Values.Look(ref holdFire, "holdFire");
 
             if (gun != null)
                 forceCreateGunAndTop = true;
@@ -329,14 +254,12 @@ namespace TurretWeaponBase
 
         public void DeconstructGunAndReset()
             {
-            Thing resultingThing;
-
-            DeconstructGunAndReset(out resultingThing);
+            DeconstructGunAndReset(out Thing _);
             }
         public void DeconstructGunAndReset(out Thing result)
         {
             result = null;
-            if (gun != null && PositionHeld != null && MapHeld != null)
+            if (gun != null && MapHeld != null)
             {
                 GenDrop.TryDropSpawn(gun, PositionHeld, MapHeld, ThingPlaceMode.Near, out result);
             }
@@ -374,49 +297,47 @@ namespace TurretWeaponBase
                     counterSearchForGun = 0;
 
                 TryToInstallWeapon();
-
-                return;
-            }
+                }
             else
             {
                 // Do work for when there is a gun
                 //base.Tick();
-                if (!this.CanSetForcedTarget && this.forcedTarget.IsValid)
-                    this.ResetForcedTarget();
+                if (!CanSetForcedTarget && forcedTarget.IsValid)
+                    ResetForcedTarget();
 
-                if (!this.CanToggleHoldFire)
-                    this.holdFire = false;
+                if (!CanToggleHoldFire)
+                    holdFire = false;
 
-                if (this.forcedTarget.ThingDestroyed)
-                    this.ResetForcedTarget();
+                if (forcedTarget.ThingDestroyed)
+                    ResetForcedTarget();
 
-                bool flag = (this.powerComp == null || this.powerComp.PowerOn) && (this.intCombComp == null || this.intCombComp.PowerOn) && (this.mannableComp == null || this.mannableComp.MannedNow);
-                if (flag && base.Spawned)
+                bool flag = (powerComp == null || powerComp.PowerOn) && (intCombComp == null || intCombComp.PowerOn) && (mannableComp == null || mannableComp.MannedNow);
+                if (flag && Spawned)
                 {
-                    this.GunCompEq.verbTracker.VerbsTick();
-                    if (!this.stunner.Stunned && this.GunCompEq.PrimaryVerb.state != VerbState.Bursting)
+                    GunCompEq.verbTracker.VerbsTick();
+                    if (!IsStunned && GunCompEq.PrimaryVerb.state != VerbState.Bursting)
                     {
-                        if (this.WarmingUp)
+                        if (WarmingUp)
                         {
-                            this.burstWarmupTicksLeft--;
-                            if (this.burstWarmupTicksLeft == 0)
-                                this.BeginBurst();
+                            burstWarmupTicksLeft--;
+                            if (burstWarmupTicksLeft == 0)
+                                BeginBurst();
                         }
                         else
                         {
-                            if (this.burstCooldownTicksLeft > 0)
-                                this.burstCooldownTicksLeft--;
+                            if (burstCooldownTicksLeft > 0)
+                                burstCooldownTicksLeft--;
 
-                            if (this.burstCooldownTicksLeft <= 0)
-                                this.TryStartShootSomething(true);
+                            if (burstCooldownTicksLeft <= 0)
+                                TryStartShootSomething(true);
                         }
                         if (top != null && rotateTop)
-                            this.top.TurretTopTick();
+                            top.TurretTopTick();
                     }
                 }
                 else
                 {
-                    this.ResetCurrentTarget();
+                    ResetCurrentTarget();
                 }
 
                 if (GunCompRel != null && GunCompRel.NeedsReload(false))
@@ -435,41 +356,32 @@ namespace TurretWeaponBase
 
         public void TryToInstallWeapon(Thing gunToInstall = null)
         {
-            List<Thing> gunsForInstallation = null;
+            List<Thing> gunsForInstallation;
 
             if (gunToInstall != null)
             {
                 gunsForInstallation = new List<Thing>() { gunToInstall };
             }
             else
-            {
+                {
                 // Check, if a gun is at my Position
                 IEnumerable<Thing> gunsFoundEnumeration = Map.listerThings.AllThings.Where(t => t.def.IsRangedWeapon && t.Position == Position);
-                if (gunsFoundEnumeration != null)
-                    gunsForInstallation = new List<Thing>(gunsFoundEnumeration);
-            }
+                gunsForInstallation = new List<Thing>(gunsFoundEnumeration);
+                }
 
-            if (gunsForInstallation != null && gunsForInstallation.Count > 0)
+            if (gunsForInstallation.Count > 0)
             {
                 // We have a gun!!!
                 Thing gunToWorkWith = gunsForInstallation[0];
 
                 // check for usability of the weapon
-                bool usableWeapon = true;
-                for (int v = 0; v < gunToWorkWith.def.Verbs.Count; v++)
-                {
-                    if (gunToWorkWith.def.Verbs[v].onlyManualCast)
-                    {
-                        usableWeapon = false;
-                        break;
-                    }
-                }
+                bool usableWeapon = gunToWorkWith.def.Verbs.All(t => !t.onlyManualCast);
 
                 // not a usable weapon, respawn it nearby
                 if (!usableWeapon)
                 {
                     gunToWorkWith.DeSpawn();
-                    GenPlace.TryPlaceThing(gunToWorkWith, Position, this.Map, ThingPlaceMode.Near);
+                    GenPlace.TryPlaceThing(gunToWorkWith, Position, Map, ThingPlaceMode.Near);
                     return;
                 }
 
@@ -489,14 +401,13 @@ namespace TurretWeaponBase
         {
             gun = thing;
 
-            List<Verb> allVerbs = this.GunCompEq.AllVerbs;
+            List<Verb> allVerbs = GunCompEq.AllVerbs;
 
-            for (int i = 0; i < allVerbs.Count; i++)
-            {
-                Verb item = allVerbs[i];
-                item.caster = this;
-                item.castCompleteCallback = new Action(this.BurstComplete);
-            }
+            foreach (Verb item in allVerbs)
+                {
+                item.caster               = this;
+                item.castCompleteCallback = BurstComplete;
+                }
 
             top = new TurretTop_TurretWeaponBase(this);
         }
@@ -516,30 +427,34 @@ namespace TurretWeaponBase
 
             if (gun != null)
             {
-                if (this.CanSetForcedTarget && GunCompEq != null && GunCompEq.PrimaryVerb != null)
+                if (CanSetForcedTarget && GunCompEq != null && GunCompEq.PrimaryVerb != null)
                 {
                     //Command_VerbTarget_TurretWeaponBase attack = new Command_VerbTarget_TurretWeaponBase();
-                    Command_VerbTarget attack = new Command_VerbTarget();
-                    attack.defaultLabel = "CommandSetForceAttackTarget".Translate();
-                    attack.defaultDesc = "CommandSetForceAttackTargetDesc".Translate();
-                    attack.icon = ContentFinder<Texture2D>.Get("UI/Commands/Attack", true);
-                    attack.verb = GunCompEq.PrimaryVerb;
-                    attack.hotKey = KeyBindingDefOf.Misc4; //N
+                    Command_VerbTarget attack = new Command_VerbTarget
+                                                    {
+                                                    defaultLabel = "CommandSetForceAttackTarget".Translate(),
+                                                    defaultDesc  = "CommandSetForceAttackTargetDesc".Translate(),
+                                                    icon         = ContentFinder<Texture2D>.Get("UI/Commands/Attack"),
+                                                    verb         = GunCompEq.PrimaryVerb,
+                                                    hotKey       = KeyBindingDefOf.Misc4 //N
+                                                    };
                     yield return attack;
                 }
 
-                if (this.forcedTarget.IsValid)
+                if (forcedTarget.IsValid)
                 {
-                    Command_Action stop = new Command_Action();
-                    stop.defaultLabel = "CommandStopForceAttack".Translate();
-                    stop.defaultDesc = "CommandStopForceAttackDesc".Translate();
-                    stop.icon = ContentFinder<Texture2D>.Get("UI/Commands/Halt", true);
-                    stop.action = delegate
-                    {
-                        ResetForcedTarget();
-                        SoundDefOf.Tick_Low.PlayOneShotOnCamera(null);
-                    };
-                    if (!this.forcedTarget.IsValid)
+                    Command_Action stop = new Command_Action
+                                              {
+                                              defaultLabel = "CommandStopForceAttack".Translate(),
+                                              defaultDesc  = "CommandStopForceAttackDesc".Translate(),
+                                              icon         = ContentFinder<Texture2D>.Get("UI/Commands/Halt"),
+                                              action       = delegate
+                                                                 {
+                                                                 ResetForcedTarget();
+                                                                 SoundDefOf.Tick_Low.PlayOneShotOnCamera();
+                                                                 }
+                                              };
+                    if (!forcedTarget.IsValid)
                     {
                         stop.Disable("CommandStopAttackFailNotForceAttacking".Translate());
                     }
@@ -547,13 +462,13 @@ namespace TurretWeaponBase
                     yield return stop;
                 }
 
-                if (this.CanToggleHoldFire)
+                if (CanToggleHoldFire)
                 {
                     yield return new Command_Toggle
                     {
                         defaultLabel = "CommandHoldFire".Translate(),
                         defaultDesc = "CommandHoldFireDesc".Translate(),
-                        icon = ContentFinder<Texture2D>.Get("UI/Commands/HoldFire", true),
+                        icon = ContentFinder<Texture2D>.Get("UI/Commands/HoldFire"),
                         hotKey = KeyBindingDefOf.Misc6,
                         toggleAction = delegate
                         {
@@ -600,18 +515,13 @@ namespace TurretWeaponBase
                 stringBuilder.Append(string.Concat("GunInstalled".Translate(), ": ---")).AppendLine();
 
 
-            CompChangeableProjectile compChangeableProjectile = this.gun.TryGetComp<CompChangeableProjectile>();
+            CompChangeableProjectile compChangeableProjectile = gun.TryGetComp<CompChangeableProjectile>();
             if (compChangeableProjectile != null)
-            {
-                if (compChangeableProjectile.Loaded)
                 {
-                    stringBuilder.AppendLine("ShellLoaded".Translate( compChangeableProjectile.LoadedShell.LabelCap ));
+                stringBuilder.AppendLine(compChangeableProjectile.Loaded
+                                             ? "ShellLoaded".Translate(compChangeableProjectile.LoadedShell.LabelCap)
+                                             : "ShellNotLoaded".Translate());
                 }
-                else
-                {
-                    stringBuilder.AppendLine("ShellNotLoaded".Translate());
-                }
-            }
             return stringBuilder.ToString().TrimEndNewlines();
         }
 
@@ -626,101 +536,75 @@ namespace TurretWeaponBase
 
             //is not a memory
             // Check if this is reservable by the pawn
-            if (!pawn.CanReserve(this, 1))
+            if (!pawn.CanReserve(this))
             {
-                yield return new FloatMenuOption("CannotUseReserved".Translate(), null, MenuOptionPriority.Default, null, null);
+                yield return new FloatMenuOption("CannotUseReserved".Translate(), null);
                 yield break;
             }
 
             // Check if this is reachable by the pawn
             if (!pawn.CanReach(this, PathEndMode.Touch, Danger.Deadly))
             {
-                yield return new FloatMenuOption("CannotUseNoPath".Translate(), null, MenuOptionPriority.Default, null, null);
+                yield return new FloatMenuOption("CannotUseNoPath".Translate(), null);
                 yield break;
             }
 
             // Do only, when no gun installed
             if (gun != null)
                 {
-                Action action = delegate
+                void Action()
                     {
-                        Job job = new Job(DefDatabase<JobDef>.GetNamed("UninstallWeaponFromTurretBase"), Position)
-                            {
-                            count = 1
-                            };
-                        pawn.jobs.TryTakeOrderedJob(job);
-                        pawn.Reserve(this, job, 1);
-                        };
+                    var job = new Job(DefDatabase<JobDef>.GetNamed("UninstallWeaponFromTurretBase"), Position) { count = 1 };
+                    pawn.jobs.TryTakeOrderedJob(job);
+                    pawn.Reserve(this, job);
+                    }       
 
-                yield return new FloatMenuOption(txtFloatMenuUninstallWeapon.Translate() + " " + this.gun.Label, action, MenuOptionPriority.Default);
-                yield break;
+                yield return new FloatMenuOption(txtFloatMenuUninstallWeapon.Translate() + " " + gun.Label, Action);
+                yield break;    
                 }
 
             // find available guns for possible use
-            IEnumerable<Thing> foundThings = Map.listerThings.AllThings.Where(t => t.def.IsRangedWeapon && !t.IsForbidden(pawn.Faction));
-            List<Thing> foundThingList;
-            if (foundThings != null)
-                foundThingList = foundThings.ToList();
-            else
-                foundThingList = null;
+            IEnumerable<Thing>     foundThings    = Map.listerThings.AllThings.Where(t => t.def.IsRangedWeapon && !t.IsForbidden(pawn.Faction));
+            List<Thing>            foundThingList = foundThings.ToList();
 
             // only guns inside the home area are valid 
-            List<IntVec3> HomeAreaCells = null;
-            if (Map.areaManager.Home.ActiveCells.FirstOrDefault<IntVec3>() != null)
-                HomeAreaCells = Map.areaManager.Home.ActiveCells.ToList();
+            List<IntVec3> HomeAreaCells = Map.areaManager.Home.ActiveCells.ToList();
             
-            List<Thing> availableGuns = new List<Thing>();
-            if (foundThingList != null && HomeAreaCells != null)
-            {
-                for (int w = 0; w < foundThingList.Count; w++)
+            var availableGuns = new List<Thing>();
+            foreach (Thing thing in foundThingList)
                 {
-                    Thing thing = foundThingList[w];
+                // don't use selfdestroying weapons
+                if (thing.def.destroyOnDrop)
+                    continue;
 
-                    // don't use selfdestroying weapons
-                    if (thing.def.destroyOnDrop)
-                        continue;
+                //dont use single shot weapons ffs, why was the check so far forward anyway?
+                bool unusableWeapon = Enumerable.Any(thing.def.Verbs, t => t.onlyManualCast);
 
-                    //dont use single shot weapons ffs, why was the check so far forward anyway?
-                    bool unusableWeapon = false;
-                    for (int v = 0; v < thing.def.Verbs.Count; v++)
+                //disallow weapons that slow the player down on small turrets
+                if (disallowSlowingGuns && thing.def.equippedStatOffsets != null)
                     {
-                        if (thing.def.Verbs[v].onlyManualCast)
+                    if (Enumerable.Any(thing.def.equippedStatOffsets, t => t.stat == StatDefOf.MoveSpeed && t.value < 0))
                         {
-                            unusableWeapon = true;
-                            break;
+                        unusableWeapon = true;
                         }
                     }
 
-                    //disallow weapons that slow the player down on small turrets
-                    if (disallowSlowingGuns && thing.def.equippedStatOffsets != null)
-                        {
-                        for (int v = 0; v < thing.def.equippedStatOffsets.Count; v++)
-                            {
-                            if (thing.def.equippedStatOffsets[v].stat == StatDefOf.MoveSpeed && thing.def.equippedStatOffsets[v].value < 0)
-                                {
-                                unusableWeapon = true;
-                                break;
-                                }
-                            }
-                        }
+                if (unusableWeapon) continue;
+                // only use weapons inside the home area
+                //if (!HomeAreaCells.Contains(thing.Position) )
+                //    continue;
 
-                    if (unusableWeapon) continue;
-                    // only use weapons inside the home area
-                    //if (!HomeAreaCells.Contains(thing.Position) )
-                    //    continue;
+                // New: use weapons inside a storage AND inside home
+                if (!thing.IsInAnyStorage() && !HomeAreaCells.Contains(thing.Position))
+                    continue;
 
-                        // New: use weapons inside a storage AND inside home
-                    if (!thing.IsInAnyStorage() && !HomeAreaCells.Contains(thing.Position))
-                        continue;
+                // can not reserve or reach?
+                if (!pawn.CanReserveAndReach(thing, PathEndMode.Touch, Danger.Deadly))
+                    continue;
 
-                    // can not reserve or reach?
-                    if (!pawn.CanReserveAndReach(thing, PathEndMode.Touch, Danger.Deadly, 1))
-                        continue;
-
-                    availableGuns.Add(thing);
+                availableGuns.Add(thing);
                 }
-            }
-            
+
             availableGuns.Sort(CompareThings);
             
             int shownEntries = floatMenuShowEntries;
@@ -728,48 +612,42 @@ namespace TurretWeaponBase
             int lastShownEntry = 0;
 
             // Make one entry per gun type found
-            int availableGunsCount = availableGuns.Count;
             for (int i = shownEntries; i < availableGuns.Count; i++)
             {
                 Thing haulThing = availableGuns[i];
 
-                if (haulThing.IsForbidden(pawn.Faction) || !pawn.CanReserveAndReach(haulThing, PathEndMode.Touch, Danger.Deadly, 1))
-                {
+                if (haulThing.IsForbidden(pawn.Faction) || !pawn.CanReserveAndReach(haulThing, PathEndMode.Touch, Danger.Deadly))
+                    {
+                    int i1 = i;
                     IEnumerable<Thing> allAvailableThings = Map.listerThings.AllThings.Where(t =>
-                                                                                                   t.def.defName == availableGuns[i].def.defName &&
-                                                                                                   !t.IsForbidden(pawn.Faction) &&
-                                                                                                   pawn.CanReserveAndReach(t, PathEndMode.Touch, Danger.Deadly, 1));
+                                                                                                 t.def.defName == availableGuns[i1].def.defName &&
+                                                                                                 !t.IsForbidden(pawn.Faction) &&
+                                                                                                 pawn.CanReserveAndReach(t, PathEndMode.Touch, Danger.Deadly));
 
                     //haulThing = Helper.FindNearestThing(allAvailableThings, Position);
                     haulThing = WeaponBaseHelper.FindNearestThing(allAvailableThings, Position);
-                }
+                    }
 
                 if (haulThing == null)
                     continue;
 
-                Action action = delegate
-                {
-                    Job job = new Job(DefDatabase<JobDef>.GetNamed("InstallWeaponOnTurretBase"), haulThing, Position)
+                void Action()
                     {
-                        count = 1,
-                        haulOpportunisticDuplicates = false,
-                        haulMode = HaulMode.ToCellNonStorage
-                    };
+                    var job = new Job(DefDatabase<JobDef>.GetNamed("InstallWeaponOnTurretBase"), haulThing, Position) { count = 1, haulOpportunisticDuplicates = false, haulMode = HaulMode.ToCellNonStorage };
                     pawn.jobs.TryTakeOrderedJob(job);
-                    pawn.Reserve(this, job, 1);
+                    pawn.Reserve(this, job);
 
 
                     // Allow this building to search for a gun
-                    this.collectingGunAllowed = true;
-                };
+                    collectingGunAllowed = true;
+                    }
 
-                Action<Rect> hoverAction = delegate
-                {
-                    if (haulThing != null)
-                        FleckMaker.Static(haulThing.Position, Map, FleckDefOf.FeedbackGoto);
-                };
+                void HoverAction(Rect obj)
+                    {
+                    if (haulThing != null) FleckMaker.Static(haulThing.Position, Map, FleckDefOf.FeedbackGoto);
+                    }
 
-                list.Add(new FloatMenuOption(txtFloatMenuInstallWeapon.Translate() + " " + haulThing.Label, action, MenuOptionPriority.Default, hoverAction));
+                list.Add(new FloatMenuOption(txtFloatMenuInstallWeapon.Translate() + " " + haulThing.Label, Action, MenuOptionPriority.Default, HoverAction));
 
                 // save shown item position for next call
                 lastShownEntry = i;
@@ -815,21 +693,20 @@ namespace TurretWeaponBase
         }
 
         private static int CompareThings(Thing x, Thing y)
-        {
+            {
             return x.Label.CompareTo(y.Label);
-        }
+            }
 
         #endregion
 
 
         #region Drawing
 
-        public override void Draw()
+        protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
-            if (top != null)
-                top.DrawTurret();
+            top?.DrawTurret();
 
-            base.Draw();
+            base.DrawAt(drawLoc, flip);
         }
 
         public override void DrawExtraSelectionOverlays()
@@ -851,25 +728,17 @@ namespace TurretWeaponBase
             }
             if (WarmingUp)
             {
-                int degreesWide = (int)((float)burstWarmupTicksLeft * 0.5f);
-                GenDraw.DrawAimPie(this, CurrentTarget, degreesWide, (float)def.size.x * 0.5f);
+                int degreesWide = (int)(burstWarmupTicksLeft * 0.5f);
+                GenDraw.DrawAimPie(this, CurrentTarget, degreesWide, def.size.x * 0.5f);
             }
             if (forcedTarget.IsValid && (!forcedTarget.HasThing || forcedTarget.Thing.Spawned))
-            {
-                Vector3 b;
-                if (forcedTarget.HasThing)
                 {
-                    b = forcedTarget.Thing.TrueCenter();
-                }
-                else
-                {
-                    b = forcedTarget.Cell.ToVector3Shifted();
-                }
+                Vector3 b = forcedTarget.HasThing ? forcedTarget.Thing.TrueCenter() : forcedTarget.Cell.ToVector3Shifted();
                 Vector3 a = this.TrueCenter();
-                b.y = Altitudes.AltitudeFor(AltitudeLayer.MetaOverlays);
+                b.y = AltitudeLayer.MetaOverlays.AltitudeFor();
                 a.y = b.y;
                 GenDraw.DrawLineBetween(a, b, Building_TurretGun.ForcedTargetLineMat);
-            }
+                }
         }
 
         #endregion
@@ -882,20 +751,19 @@ namespace TurretWeaponBase
             if (gun == null)
                 return false;
 
-            Pawn pawn = t as Pawn;
-            if (pawn != null)
+            if (t is Pawn pawn)
             {
-                if (this.GunCompEq.PrimaryVerb.ProjectileFliesOverhead())
+                if (GunCompEq.PrimaryVerb.ProjectileFliesOverhead())
                 {
-                    RoofDef roofDef = base.Map.roofGrid.RoofAt(t.Position);
+                    RoofDef roofDef = Map.roofGrid.RoofAt(t.Position);
                     if (roofDef != null && roofDef.isThickRoof)
                     {
                         return false;
                     }
                 }
-                if (this.mannableComp == null)
+                if (mannableComp == null)
                 {
-                    return !GenAI.MachinesLike(base.Faction, pawn);
+                    return !GenAI.MachinesLike(Faction, pawn);
                 }
                 if (pawn.RaceProps.Animal && pawn.Faction == Faction.OfPlayer)
                 {
@@ -912,26 +780,26 @@ namespace TurretWeaponBase
 
             if (!targ.IsValid)
             {
-                if (this.forcedTarget.IsValid)
-                    this.ResetForcedTarget();
+                if (forcedTarget.IsValid)
+                    ResetForcedTarget();
                 return;
             }
-            if ((targ.Cell - base.Position).LengthHorizontal < this.GunCompEq.PrimaryVerb.verbProps.minRange)
+            if ((targ.Cell - Position).LengthHorizontal < GunCompEq.PrimaryVerb.verbProps.minRange)
             {
                 Messages.Message("MessageTargetBelowMinimumRange".Translate(), this, MessageTypeDefOf.RejectInput);
                 return;
             }
-            if ((targ.Cell - base.Position).LengthHorizontal > this.GunCompEq.PrimaryVerb.verbProps.range)
+            if ((targ.Cell - Position).LengthHorizontal > GunCompEq.PrimaryVerb.verbProps.range)
             {
                 Messages.Message("MessageTargetBeyondMaximumRange".Translate(), this, MessageTypeDefOf.RejectInput);
                 return;
             }
-            if (this.forcedTarget != targ)
+            if (forcedTarget != targ)
             {
-                this.forcedTarget = targ;
-                if (this.burstCooldownTicksLeft <= 0)
+                forcedTarget = targ;
+                if (burstCooldownTicksLeft <= 0)
                 {
-                    this.TryStartShootSomething(false);
+                    TryStartShootSomething(false);
                 }
             }
         }
@@ -946,26 +814,25 @@ namespace TurretWeaponBase
             if (gun == null)
                 return LocalTargetInfo.Invalid;
 
-            IAttackTargetSearcher attackTargetSearcher = this.TargSearcher();
+            IAttackTargetSearcher attackTargetSearcher = TargSearcher();
             Faction faction = attackTargetSearcher.Thing.Faction;
-            float range = this.AttackVerb.verbProps.range;
-            Building t;
-            if (Rand.Value < 0.5f && this.AttackVerb.ProjectileFliesOverhead() && faction.HostileTo(Faction.OfPlayer) && base.Map.listerBuildings.allBuildingsColonist.Where(delegate (Building x)
-            {
-                float num = this.AttackVerb.verbProps.EffectiveMinRange(x, this);
-                float num2 = (float)x.Position.DistanceToSquared(this.Position);
-                return num2 > num * num && num2 < range * range;
-            }).TryRandomElement(out t))
+            float range = AttackVerb.verbProps.range;
+            if (Rand.Value < 0.5f && AttackVerb.ProjectileFliesOverhead() && faction.HostileTo(Faction.OfPlayer) && Map.listerBuildings.allBuildingsColonist.Where(delegate (Building x)
+                                                                                                                                                                       {
+                                                                                                                                                                       float num = AttackVerb.verbProps.EffectiveMinRange(x, this);
+                                                                                                                                                                       float num2 = x.Position.DistanceToSquared(Position);
+                                                                                                                                                                       return num2 > num * num && num2 < range * range;
+                                                                                                                                                                       }).TryRandomElement(out Building t))
             {
                 return t;
             }
             TargetScanFlags targetScanFlags = TargetScanFlags.NeedThreat | TargetScanFlags.NeedAutoTargetable;
-            if (!this.AttackVerb.ProjectileFliesOverhead())
+            if (!AttackVerb.ProjectileFliesOverhead())
             {
                 targetScanFlags |= TargetScanFlags.NeedLOSToAll;
                 targetScanFlags |= TargetScanFlags.LOSBlockableByGas;
             }
-            if (this.AttackVerb.IsIncendiary_Ranged())
+            if (AttackVerb.IsIncendiary_Ranged())
             {
                 targetScanFlags |= TargetScanFlags.NeedNonBurning;
             }
@@ -973,24 +840,24 @@ namespace TurretWeaponBase
         }
         private IAttackTargetSearcher TargSearcher()
         {
-            if (this.mannableComp != null && this.mannableComp.MannedNow)
+            if (mannableComp != null && mannableComp.MannedNow)
             {
-                return this.mannableComp.ManningPawn;
+                return mannableComp.ManningPawn;
             }
             return this;
         }
         private void ResetCurrentTarget()
         {
-            this.currentTargetInt = LocalTargetInfo.Invalid;
-            this.burstWarmupTicksLeft = 0;
+            currentTargetInt = LocalTargetInfo.Invalid;
+            burstWarmupTicksLeft = 0;
         }
         private void ResetForcedTarget()
         {
-            this.forcedTarget = LocalTargetInfo.Invalid;
-            this.burstWarmupTicksLeft = 0;
-            if (this.burstCooldownTicksLeft <= 0)
+            forcedTarget = LocalTargetInfo.Invalid;
+            burstWarmupTicksLeft = 0;
+            if (burstCooldownTicksLeft <= 0)
             {
-                this.TryStartShootSomething(false);
+                TryStartShootSomething(false);
             }
         }
 
@@ -999,55 +866,48 @@ namespace TurretWeaponBase
             if (gun == null)
                 return;
 
-            if (!base.Spawned || (this.holdFire && this.CanToggleHoldFire) || (this.GunCompEq.PrimaryVerb.ProjectileFliesOverhead() && base.Map.roofGrid.Roofed(base.Position)) || 
-                !this.AttackVerb.Available() || (this.TryGetComp<CompRefuelable>() != null && !this.TryGetComp<CompRefuelable>().HasFuel))
+            if (!Spawned || (holdFire && CanToggleHoldFire) || (GunCompEq.PrimaryVerb.ProjectileFliesOverhead() && Map.roofGrid.Roofed(Position)) || 
+                !AttackVerb.Available() || (this.TryGetComp<CompRefuelable>() != null && !this.TryGetComp<CompRefuelable>().HasFuel))
             {
                 ResetCurrentTarget();
                 return;
             }
-            bool isValid = this.currentTargetInt.IsValid;
-            if (this.forcedTarget.IsValid)
+            bool isValid = currentTargetInt.IsValid;
+            currentTargetInt = forcedTarget.IsValid ? forcedTarget : TryFindNewTarget();
+            if (!isValid && currentTargetInt.IsValid)
             {
-                this.currentTargetInt = this.forcedTarget;
+                SoundDefOf.TurretAcquireTarget.PlayOneShot(new TargetInfo(Position, Map));
             }
-            else
+            if (!currentTargetInt.IsValid)
             {
-                this.currentTargetInt = this.TryFindNewTarget();
-            }
-            if (!isValid && this.currentTargetInt.IsValid)
-            {
-                SoundDefOf.TurretAcquireTarget.PlayOneShot(new TargetInfo(base.Position, base.Map, false));
-            }
-            if (!this.currentTargetInt.IsValid)
-            {
-                this.ResetCurrentTarget();
+                ResetCurrentTarget();
                 return;
             }
-            float randomInRange = this.def.building.turretBurstWarmupTime.RandomInRange;
+            float randomInRange = def.building.turretBurstWarmupTime.RandomInRange;
             if (randomInRange > 0f)
             {
-                this.burstWarmupTicksLeft = randomInRange.SecondsToTicks();
+                burstWarmupTicksLeft = randomInRange.SecondsToTicks();
                 return;
             }
             if (canBeginBurstImmediately)
             {
-                this.BeginBurst();
+                BeginBurst();
                 return;
             }
-            this.burstWarmupTicksLeft = 1;
+            burstWarmupTicksLeft = 1;
         }
 
         protected virtual void BeginBurst()
         {
-            GunCompEq.PrimaryVerb.TryStartCastOn(CurrentTarget, false, true);
-            base.OnAttackedTarget(this.CurrentTarget);
+            GunCompEq.PrimaryVerb.TryStartCastOn(CurrentTarget);
+            OnAttackedTarget(CurrentTarget);
         }
 
         protected void BurstComplete()
         {
-            this.burstCooldownTicksLeft = getFireCooldownTicks();
+            burstCooldownTicksLeft = getFireCooldownTicks();
 
-            this.loaded = false;
+            loaded = false;
 
             if (overrideRefuelPerBurst > 0)
                 this.TryGetComp<CompRefuelable>()?.ConsumeFuel(overrideRefuelPerBurst);
@@ -1070,16 +930,16 @@ namespace TurretWeaponBase
             int aimTime;
             int cooldown;
             //base cooldown
-            if (this.def.building.turretBurstCooldownTime >= 0f)
+            if (def.building.turretBurstCooldownTime >= 0f)
                 {
-                aimTime = this.def.building.turretBurstWarmupTime.Average.SecondsToTicks();
-                cooldown = this.def.building.turretBurstCooldownTime.SecondsToTicks();
+                aimTime = def.building.turretBurstWarmupTime.Average.SecondsToTicks();
+                cooldown = def.building.turretBurstCooldownTime.SecondsToTicks();
                 }
             else
                 {
                 //Fun fact: it doesn't actually give a single fuck about the pawn.
-                aimTime = this.GunCompEq.PrimaryVerb.verbProps.warmupTime.SecondsToTicks();
-                cooldown = this.GunCompEq.PrimaryVerb.verbProps.AdjustedCooldown(this.GunCompEq.PrimaryVerb, null).SecondsToTicks();
+                aimTime = GunCompEq.PrimaryVerb.verbProps.warmupTime.SecondsToTicks();
+                cooldown = GunCompEq.PrimaryVerb.verbProps.AdjustedCooldown(GunCompEq.PrimaryVerb, null).SecondsToTicks();
                 }
 
             //cooldown multipliers
@@ -1109,14 +969,13 @@ namespace TurretWeaponBase
 
         public virtual Thing FindAmmoInAnyHopper(ThingDef ammo)
             {
-            for (int i = 0; i < this.AdjCellsCardinalInBounds.Count; i++)
+            for (int i = 0; i < AdjCellsCardinalInBounds.Count; i++)
                 {
                 Thing thing = null;
                 Thing thing2 = null;
-                List<Thing> thingList = this.AdjCellsCardinalInBounds[i].GetThingList(base.Map);
-                for (int j = 0; j < thingList.Count; j++)
+                List<Thing> thingList = AdjCellsCardinalInBounds[i].GetThingList(Map);
+                foreach (Thing thing3 in thingList)
                     {
-                    Thing thing3 = thingList[j];
                     if (thing3.def == ammo)
                         {
                         thing = thing3;
@@ -1156,8 +1015,6 @@ namespace TurretWeaponBase
             //[HarmonyDebug]
             static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
                 {
-                Label? label;
-
                 var instructionsList = instructions.ToList();
 
                 List<Label> searchFor = instructionsList.FindLast(x => x.opcode == OpCodes.Ldloc_0).labels;
@@ -1165,11 +1022,11 @@ namespace TurretWeaponBase
                 // Wee woo, off by one warning
                 for (var i = 0; i < instructionsList.Count - 1; i++)
                     {
-                    var instruction = instructionsList[i];
+                    CodeInstruction    instruction = instructionsList[i];
                     if (
-                        instructionsList[i + 1].Branches(out label) &&
-                        label != null &&
-                        searchFor.Contains((Label)label) &&
+                        instructionsList[i + 1].Branches(out Label? label) &&
+                        label != null                                      &&
+                        searchFor.Contains((Label)label)                   &&
                         instruction.opcode == OpCodes.Ldloc_2
                         )
 
@@ -1192,7 +1049,7 @@ namespace TurretWeaponBase
 
                         // verb = building_TurretGun.AttackVerb;
                         yield return new CodeInstruction(OpCodes.Ldloc_S, building_TurretGun);
-                        yield return new CodeInstruction(OpCodes.Callvirt, typeof(Building_TurretWeaponBase).GetProperty("AttackVerb").GetGetMethod());
+                        yield return new CodeInstruction(OpCodes.Callvirt, typeof(Building_TurretWeaponBase).GetProperty("AttackVerb")!.GetGetMethod());
                         yield return new CodeInstruction(OpCodes.Stloc_2);
 
                         instruction.labels = new List<Label> { returnValue };
@@ -1202,7 +1059,7 @@ namespace TurretWeaponBase
                 yield return instructionsList.Last();
                 }
             }
-
+/*
         [HarmonyPatch(typeof(CompReloadable), "ReloadFrom")]
         static class BetterTurrets_CompReloadable_ReloadFrom_Patch
             {
@@ -1230,7 +1087,7 @@ namespace TurretWeaponBase
                     }
                 }
             }
-
+*/
 
 #pragma warning restore IDE0051
             #endregion
